@@ -1,0 +1,47 @@
+<form id="myForm" method='post' action='login.php'>
+                
+    <p><input type='text' placeholder='Tài khoản' data-val='true' data-val-length='T&#xEA;n &#x111;&#x103;ng nh&#x1EAD;p t&#x1EEB; 3 &#x111;&#x1EBF;n 25 k&#xED; t&#x1EF1;' data-val-length-max='25' data-val-length-min='3' data-val-regex='T&#xE0;i kho&#x1EA3;n ph&#x1EA3;i b&#x1EAF;t &#x111;&#x1EA7;u b&#x1EB1;ng ch&#x1EEF;, k&#x1EBF; &#x111;&#x1EBF;n l&#xE0; ch&#x1EEF; ho&#x1EB7;c s&#x1ED1;' data-val-regex-pattern='^[a-zA-Z][\w]{1,}' data-val-required='T&#xE0;i kho&#x1EA3;n b&#x1EAF;t bu&#x1ED9;c' id='user' maxlength='25' name='user' value=''></p>
+    <span class='field-validation-valid' data-valmsg-for='user' data-valmsg-replace='true'></span>
+    <p><input type='password' placeholder='Mật khẩu' data-val='true' data-val-length='M&#x1EAD;t kh&#x1EA9;u t&#x1EEB; 4 &#x111;&#x1EBF;n 25 k&#xED; t&#x1EF1;' data-val-length-max='25' data-val-length-min='4' data-val-required='M&#x1EAD;t kh&#x1EA9;u l&#xE0; b&#x1EAF;t bu&#x1ED9;c' id='pass' maxlength='25' name='pass'></p>
+    <span class='field-validation-valid' data-valmsg-for='pass' data-valmsg-replace='true'></span>
+    <p class='submit'><input type='submit' name='commit' value='Login'></p>
+</form>
+<script>
+    var myForm = document.getElementById("myForm");
+    window.onload = function() {
+    document.getElementById("user").value = localStorage.getItem("user");
+};
+    myForm.addEventListener("submit", function(event) {
+        var user = document.getElementById("user").value;
+        localStorage.setItem("user", user);
+        var pass = document.getElementById("pass").value;
+        var regex = /^[a-zA-Z][\w]{1,}$/;
+        console.log("ds");
+        if (user.length==0||pass == 0) {
+            alert("Tên đăng nhập Hoặc Mật Khẩu Để Trống");
+            event.preventDefault();
+            window.location.href = "./";
+            return;
+        }
+        if (!regex.test(user)) {
+            alert("Tên đăng nhập không hợp lệ");
+            event.preventDefault();
+            window.location.href = "./";
+            return;
+        }
+
+        if (pass.length < 4 || pass.length > 25) {
+            alert("Mật khẩu phải có từ 4 đến 25 ký tự");
+            event.preventDefault();
+            window.location.href = "./";
+            return;
+            
+        }
+        // if (!regex.test(pass)) {
+        //     alert("Mật Khẩu Không Thể chứ Kí Tự Đặc Biệt");
+        //     event.preventDefault();
+        //     window.location.href = "./";
+            
+        // }
+    });
+</script>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Trang quản lý admin</title>
+	<script src="https://cdn.jsdelivr.net/npm/@d3fc/d3fc-barchart@16.0.0/dist/d3fc-barchart.js"></script>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li><a href="#danh-sach-tai-khoan">Danh sách các tài khoản</a></li>
+			<li><a href="#danh-sach-san-pham">Danh sách các sản phẩm</a></li>
+			<li><a href="#doanh-thu-thang">Doanh thu tháng</a></li>
+		</ul>
+	</nav>
+
+	<section id="danh-sach-tai-khoan">
+		<h2>Danh sách các tài khoản</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Tên đăng nhập</th>
+					<th>Họ tên</th>
+					<th>Email</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+					// Kết nối tới database và lấy danh sách các tài khoản
+					$conn = mysqli_connect('localhost', 'username', 'password', 'database_name');
+					$query = "SELECT * FROM users";
+					$result = mysqli_query($conn, $query);
+
+					// Hiển thị danh sách các tài khoản
+					while ($row = mysqli_fetch_assoc($result)) {
+						echo "<tr>";
+						echo "<td>" . $row['username'] . "</td>";
+						echo "<td>" . $row['fullname'] . "</td>";
+						echo "<td>" . $row['email'] . "</td>";
+						echo "</tr>";
+					}
+
+					// Đóng kết nối
+					mysqli_close($conn);
+				?>
+			</tbody>
+		</table>
+	</section>
+
+	<section id="danh-sach-san-pham">
+		<h2>Danh sách các sản phẩm</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Mã sản phẩm</th>
+					<th>Tên sản phẩm</th>
+					<th>Giá bán</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+					// Kết nối tới database và lấy danh sách các sản phẩm
+					$conn = mysqli_connect('localhost', 'username', 'password', 'database_name');
+					$query = "SELECT * FROM products";
+					$result = mysqli_query($conn, $query);
+
+					// Hiển thị danh sách các sản phẩm
+					while ($row = mysqli_fetch_assoc($result)) {
+						echo "<tr>";
+						echo "<td>" . $row['product_code'] . "</td>";
+						echo "<td>" . $row['product_name'] . "</td>";
+						echo "<td>" . $row['price'] . "</td>";
+						echo "</tr>";
+					}
+
+					// Đóng kết nối
+					mysqli_close($conn);
+				?>
+			</tbody>
+		</table>
+	</section>
+
+	<section id="doanh-thu-thang">
+        <h2>Doanh thu tháng</h2>
+		<div id="barchart"></div>
+		<?php
+			// Kết nối tới database và lấy danh sách các sản phẩm
+			$conn = mysqli_connect('localhost', 'username', 'password', 'database_name');
+			$query = "SELECT product_name, SUM(quantity * price) AS revenue FROM orders JOIN products ON orders.product_id = products.product_id WHERE YEAR(order_date) = YEAR(CURRENT_DATE()) AND MONTH(order_date) = MONTH(CURRENT_DATE()) GROUP BY product_name";
+			$result = mysqli_query($conn, $query);
+php
+Copy code
+		// Tạo mảng chứa dữ liệu để vẽ biểu đồ
+		$data = array();
+		while ($row = mysqli_fetch_assoc($result)) {
+			$data[] = array('name' => $row['product_name'], 'value' => $row['revenue']);
+		}
+
+		// Chuyển đổi dữ liệu thành chuỗi JSON
+		$json_data = json_encode($data);
+	?>
+
+
+</section>
+</body>
+</html>
