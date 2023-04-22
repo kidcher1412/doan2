@@ -17,10 +17,11 @@
 <html lang="zxx">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Fashi Template">
-    <meta name="keywords" content="Fashi, unica, creative, html">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fashi Shop</title>
+    <meta name="description" content="Fashi Shop">
+    <meta name="keywords" content="Fashi, unica, creative, html">
     <!-- <title>Shop | Fashi</title> -->
 
     <!-- Google Font -->
@@ -125,7 +126,7 @@
                                                             </td>
                                                             <td class='si-text'>
                                                                 <div class='product-selected'>
-                                                                    <p>".$value["price"]." x ".$value["cartAmount"]."</p>
+                                                                    <p>".number_format($value["price"], 0, ',', '.')." đ"." x ".$value["cartAmount"]."</p>
                                                                     <h6>".$value["name"]."</h6>
                                                                 </div>
                                                             </td>
@@ -171,7 +172,7 @@
                                         </tbody></table>
                                     </div>
                                     <div class="select-total" id="loadtotalcartlayout"><span>Tổng:</span>
-                            <h5><?php echo $totalMoneyPay?> đ</h5></div>
+                            <h5><?php echo number_format($totalMoneyPay, 0, ',', '.')?> đ</h5></div>
                                     <div class="select-button">
                                         <a href="./cart.php" class="primary-btn view-card">Xem chi tiết</a>
                                     </div>
@@ -212,18 +213,6 @@
             </div>
         </div>
     </header>
-    <div class="breacrumb-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb-text">
-                        <a href="/Home"><i class="fa fa-home"></i> Home</a>
-                        <span>Shop</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Header End -->
     <div class="root">
         <div class ="modalThong"></div>

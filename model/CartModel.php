@@ -59,6 +59,30 @@
                 echo 'Thêm Thành Công Số Lượng Sản Phẩm trong giỏ hàng!';
             }
         }
+        public function addnewCart_Amount($user_id,$product_id,$amount){
+            $db = new Database;
+            $query = "SELECT amount FROM sanphams WHERE product_id = $product_id";
+            $result = $db->select($query);
+            $value = $result->fetch_assoc();
+            if($value["amount"]<$amount){
+                echo "false-slg";
+                exit();
+            }
+            $query = "SELECT * FROM carts WHERE product_id = $product_id and user_id = $user_id ";
+            $result = $db->select($query);
+            if($result){
+                $query = "UPDATE carts SET carts.amonut  = carts.amonut+$amount WHERE product_id = $product_id and user_id = $user_id ";
+                $db->update($query);
+                $modal = new Modal();
+                echo 'Update Thành Công Số Lượng Sản Phẩm trong giỏ hàng!';
+            }
+            else{
+                $query = "INSERT INTO carts VALUES ('', $product_id,$user_id,$amount)";
+                $db->insert($query);
+                $modal = new Modal();
+                echo 'Thêm Thành Công Số Lượng Sản Phẩm trong giỏ hàng!';
+            }
+        }
         public function updateCart($cartID,$amount){
                 $dbs = new Database();
                 $query = "UPDATE carts SET carts.amonut  = $amount WHERE cart_id='$cartID'";

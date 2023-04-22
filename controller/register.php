@@ -1,4 +1,5 @@
 <?php
+     require_once('../model/UserModel.php');
     class Register{
         private $db;
         public function __construct(){

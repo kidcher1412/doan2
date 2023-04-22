@@ -22,6 +22,20 @@
   height: auto;
 }
 </style>
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text product-more">
+                    <a href="./home.php"><i class="fa fa-home"></i> Trang chủ</a>
+                    <span>Sản Phẩm Chi Tiết</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Section Begin -->
    <!-- Product Shop Section Begin -->
     <section class="product-shop spad page-details">
         <div class="container">
@@ -61,9 +75,12 @@
                                 </div>
                                 <div class="quantity">
                                     <div class="pro-qty">
-                                        <input type="text" value="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="10" id="slsp">
+                                        <span class='dec qtybtn'>-</span>
+                                        <input type="number" value="1" min='1' max='<?php echo $productInfo["amount"];?>' oninput='if(this.value><?php echo $productInfo["amount"];?>) this.value=<?php echo $productInfo["amount"];?>' maxlength="10" id="slsp">
+                                        <span class='inc qtybtn'>+</span>
                                     </div>
-                                    <a class="primary-btn pd-cart" onclick="ThemSPAjax(1)">Thêm vào giỏ</a>
+                                    <a class="primary-btn pd-cart" onclick="ShopThemSPAjax(<?php echo $productInfo['product_id'];
+                                    ?>)">Thêm vào giỏ</a>
                                 </div>
                                 <ul class="pd-tags">
                                     <li><span>THƯƠNG HIỆU</span>: 
@@ -122,6 +139,80 @@
     </section>
     <!-- Product Shop Section End -->
 <script>
+        window.addEventListener('load', function() {
+            var event = new Event('change');
+            document.querySelector(".row").dispatchEvent(event);
+            });
+        document.querySelector(".row").addEventListener("change",function(){
+            var proQty = $('.pro-qty');
+            proQty.on('click', '.qtybtn', function () {
+                var $button = $(this);
+                var oldValue = $button.parent().find('input').val();
+                if ($button.hasClass('inc')) {
+                     // Don't allow decrementing below max
+                     if (oldValue < parseInt(document.getElementById("slsp").max)) {
+                        var newVal = parseFloat(oldValue) + 1;
+                    } else {
+                        var newVal = parseInt(document.getElementById("slsp").max);
+                    }
+                } else {
+                    // Don't allow decrementing below zero
+                    if (oldValue > 1) {
+                        var newVal = parseFloat(oldValue) - 1;
+                    } else {
+                        newVal = 1;
+                    }
+                }
+        $button.parent().find('input').val(newVal).promise().done(function() {
+        var event = new Event('change');
+        $button.parent().find('input')[0].dispatchEvent(event);
+            document.querySelector(".pd-desc h4").innerHTML = parseInt(newVal*<?php echo $productInfo["price"];?>).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
+        });
+        })
+        })
+        function ShopThemSPAjax(ProductID){
+            if(document.querySelector("#slsp").value<=<?php echo $productInfo["amount"]?>)
+                $.ajax({
+                    type: 'POST',
+                    url: './shop.php',
+                    data:{
+                        action: "addCartProduct",
+                        ProductID: ProductID,
+                        amount: document.querySelector("#slsp").value
+                    },
+                    success: function(responseText) {
+                        if(responseText=='false-login'){
+                            Swal.fire({
+                                type: 'error',
+                                title: 'Vui Lòng Đăng Nhập để Thêm Giỏ Hàng',
+                                html: "<a href='./login.php'>Đăng Nhập Ngay</a>"
+                            });
+                            return;
+                        }
+                        if(responseText=='false-slg'){
+                            Swal.fire({
+                                type: 'error',
+                                title: 'Hàng Không Đủ để có thể thêm vào giỏ hàng',
+                                html: "liên hệ với chúng tôi để phản ảnh tình trạng hàng hóa"
+                            });
+                            return;
+                        }
+                        else{
+                            Swal.fire({
+                                type: 'success',
+                                title: responseText
+                            });
+                        }
+                        getCartByAjaxinNav();
+                    }
+                });
+            else
+                Swal.fire({
+                    type: 'error',
+                    title: 'Hàng Không Đủ để có thể thêm vào giỏ hàng',
+                    html: "liên hệ với chúng tôi để phản ảnh tình trạng hàng hóa"
+                });
+        }
     function clearActiveThumbnails() {
   const thumbnails = document.querySelectorAll('.thumbnail');
   thumbnails.forEach(thumbnail => thumbnail.classList.remove('active'));

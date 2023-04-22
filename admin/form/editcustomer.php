@@ -10,47 +10,46 @@
                         <h4><span id='title-modal'>Login</span></h4>
                     </div>
                     <div class='modal-body' style='padding:40px 50px;'>
-                        <form role='form' onsubmit='return false;'>
+                        <form role='form' id="custommeraccount">
                             
                             <div class='form-group'>
                                 <label>ID Tài Khoản</label>
-                                <input type='text' readonly='readonly' class='form-control' id='userid' placeholder='ID' data-val='true' data-val-length-max='25' data-val-length-min='3' maxlength='25' name='KH.userid' value=''>
-                                <span class='field-validation-valid' data-valmsg-for='KH.user' data-valmsg-replace='true'></span>
+                                <input type='text' readonly='readonly' class='form-control' id='userid' placeholder='ID' name='KH.userid' value=''>
                             </div>
                             <div class='form-group'>
                                 <label>Tài khoản</label>
-                                <input type='text' class='form-control' id='user' placeholder='Tài khoản' data-val='true' data-val-length='T&#xEA;n &#x111;&#x103;ng nh&#x1EAD;p t&#x1EEB; 3 &#x111;&#x1EBF;n 25 k&#xED; t&#x1EF1;' data-val-length-max='25' data-val-length-min='3' data-val-regex='T&#xE0;i kho&#x1EA3;n ph&#x1EA3;i b&#x1EAF;t &#x111;&#x1EA7;u b&#x1EB1;ng ch&#x1EEF;' data-val-regex-pattern='^[a-zA-Z][\w]{1,}' data-val-required='T&#xE0;i kho&#x1EA3;n b&#x1EAF;t bu&#x1ED9;c' maxlength='25' name='KH.user' value=''>
-                                <span class='field-validation-valid' data-valmsg-for='KH.user' data-valmsg-replace='true'></span>
+                                <input required type='text' class='form-control' id='user' placeholder='Tài khoản' maxlength='25' name='KH.user' value=''>
+                                <span class='field-validation-valid' data-valmsg-for='KH.user'></span>
                             </div>
                             <div class='form-group'>
                                 <label>Mật khẩu</label>
-                                <input type='password' class='form-control' id='pass' placeholder='Mật khẩu' data-val='true' data-val-length='M&#x1EAD;t kh&#x1EA9;u t&#x1EEB; 4 &#x111;&#x1EBF;n 25 k&#xED; t&#x1EF1;' data-val-length-max='25' data-val-length-min='4' data-val-required='M&#x1EAD;t kh&#x1EA9;u l&#xE0; b&#x1EAF;t bu&#x1ED9;c' maxlength='25' name='KH.pass'>
-                                <span class='field-validation-valid' data-valmsg-for='KH.pass' data-valmsg-replace='true'></span>
+                                <input required type='password' class='form-control' id='pass' placeholder='Mật khẩu'  name='KH.pass'>
+                                <span class='field-validation-valid' data-valmsg-for='KH.pass'></span>
                             </div>
                             <div class='form-group'>
                                 <label>Nhập lại mật khẩu</label>
-                                <input type='password' class='form-control' id='repass' placeholder='Nhập lại mật khẩu' data-val='true' data-val-equalto='Nh&#x1EAD;p l&#x1EA1;i m&#x1EAD;t kh&#x1EA9;u kh&#xF4;ng kh&#x1EDB;p v&#x1EDB;i m&#x1EAD;t kh&#x1EA9;u &#x111;&#xE3; nh&#x1EAD;p' data-val-equalto-other='*.pass' name='KH.repass'>
-                                <span class='field-validation-valid' data-valmsg-for='KH.repass' data-valmsg-replace='true'></span>
+                                <input required type='password' class='form-control' id='repass' placeholder='Nhập lại mật khẩu'  data-val-equalto-other='*.pass' name='KH.repass'>
+                                <span class='field-validation-valid' data-valmsg-for='KH.repass'></span>
                             </div>
                             <div class='form-group'>
                                 <label>Họ tên</label>
-                                <input type='text' class='form-control' id='full_name' placeholder='Họ tên' data-val='true' data-val-length='H&#x1ECD; t&#xEA;n t&#x1EEB; 4 &#x111;&#x1EBF;n 100 k&#xED; t&#x1EF1;' data-val-length-max='100' data-val-length-min='4' data-val-required='H&#x1ECD; t&#xEA;n l&#xE0; b&#x1EAF;t bu&#x1ED9;c' maxlength='100' name='KH.full_name' value=''>
-                                <span class='field-validation-valid' data-valmsg-for='KH.full_name' data-valmsg-replace='true'></span>
+                                <input required type='text' class='form-control' id='full_name' placeholder='Họ tên'  name='KH.full_name' value=''>
+                                <span class='field-validation-valid' data-valmsg-for='KH.full_name'></span>
                             </div>
                             <div class='form-group'>
                                 <label>Số điện thoại</label>
-                                <input type='text' class='form-control' id='phone' placeholder='Số điện thoại' data-val='true' data-val-regex='S&#x1ED1; &#x111;i&#x1EC7;n tho&#x1EA1;i ph&#x1EA3;i l&#xE0; s&#x1ED1; v&#xE0; d&#xE0;i t&#x1EEB; 10 &#x111;&#x1EBF;n 11' data-val-regex-pattern='^([\d]{10,11})' data-val-required='S&#x1ED1; &#x111;i&#x1EC7;n tho&#x1EA1;i l&#xE0; b&#x1EAF;t bu&#x1ED9;c' name='KH.phone' value=''>
-                                <span class='field-validation-valid' data-valmsg-for='KH.phone' data-valmsg-replace='true'></span>
+                                <input required type='text' class='form-control' id='phone' placeholder='Số điện thoại'  name='KH.phone' value=''>
+                                <span class='field-validation-valid' data-valmsg-for='KH.phone'></span>
                             </div>
                             <div class='form-group'>
                                 <label>Thư điện tử</label>
-                                <input type='text' class='form-control' id='mail' placeholder='Thư điện tử' data-val='true' data-val-email='Th&#x1B0; &#x111;i&#x1EC7;n t&#x1EED; kh&#xF4;ng ph&#xF9; h&#x1EE3;p' data-val-required='Th&#x1B0; &#x111;i&#x1EC7;n t&#x1EED; l&#xE0; b&#x1EAF;t bu&#x1ED9;c' name='KH.mail' value=''>
-                                <span class='field-validation-valid' data-valmsg-for='KH.mail' data-valmsg-replace='true'></span>
+                                <input required type='mail' class='form-control' id='mail' placeholder='Thư điện tử' name='KH.mail' value=''>
+                                <span class='field-validation-valid' data-valmsg-for='KH.mail'></span>
                             </div>
                             <div class='form-group'>
                                 <label>Địa chỉ</label>
-                                <input type='text' class='form-control' id='address' placeholder='Địa chỉ' data-val='true' data-val-required='&#x110;&#x1ECB;a ch&#x1EC9; l&#xE0; b&#x1EAF;t bu&#x1ED9;c' name='KH.address' value=''>
-                                <span class='field-validation-valid' data-valmsg-for='KH.address' data-valmsg-replace='true'></span>
+                                <input required type='text' class='form-control' id='address' placeholder='Địa chỉ' name='KH.address' value=''>
+                                <span class='field-validation-valid' data-valmsg-for='KH.address'></span>
                             </div>
                             <div class='form-group'>
                                 <label>Giới tính</label>
@@ -58,16 +57,16 @@
                                     <option value='Nam'>Nam</option>
                                     <option value='N&#x1EEF;'>Nữ</option>
                                 </select>
-                                <span class='field-validation-valid' data-valmsg-for='KH.sex' data-valmsg-replace='true'></span>
+                                <span class='field-validation-valid' data-valmsg-for='KH.sex'></span>
                             </div>
                             <div class='form-group'>
                                 <label>Ngày sinh</label>
-                                <input type='date' class='form-control' id='dateborn' placeholder='Ngày sinh' data-val='true' data-val-required='Ng&#xE0;y sinh l&#xE0; b&#x1EAF;t bu&#x1ED9;c' name='KH.dateborn' value=''>
-                                <span class='field-validation-valid' data-valmsg-for='KH.dateborn' data-valmsg-replace='true'></span>
+                                <input required type='date' class='form-control' id='dateborn' placeholder='Ngày sinh' data-val='true' data-val-required='Ng&#xE0;y sinh l&#xE0; b&#x1EAF;t bu&#x1ED9;c' name='KH.dateborn' value=''>
+                                <span class='field-validation-valid' data-valmsg-for='KH.dateborn'></span>
                             </div>
                             <div class='checkbox'>
                             </div>
-                            <button type='submit' class='btn btn-success btn-block' onclick='SubmitEditKH()' id='button_submit'>Sửa</button>
+                            <button type='submit' class='btn btn-success btn-block'>Sửa</button>
                         </form>
                     </div>
                     <div class='modal-footer'>
@@ -78,6 +77,90 @@
             </div>
         </div>
     </div>
+    <script>
+            const user = document.getElementById("user");
+    const pass = document.getElementById("pass");
+    const repass = document.getElementById("repass");
+    const phone = document.getElementById("phone");
+    const sex = document.getElementsByName("sex");
+    const dateborn = document.getElementById("dateborn");
+    const address = document.getElementById("address");
+    const mail = document.getElementById("mail");
+    const full_name = document.getElementById("full_name");
+    const usermess = document.querySelector('[data-valmsg-for="KH.user"]');
+    const passmess = document.querySelector('[data-valmsg-for="KH.pass"]');
+    const repassmess = document.querySelector('[data-valmsg-for="KH.repass"]');
+    const phonemess = document.querySelector('[data-valmsg-for="KH.phone"]');
+    const sexmess = document.querySelector('[data-valmsg-for="KH.sex"]');
+    const datebornmess = document.querySelector('[data-valmsg-for="KH.dateborn"]');
+    const addressmess = document.querySelector('[data-valmsg-for="KH.address"]');
+    const mailmess = document.querySelector('[data-valmsg-for="KH.mail"]');
+    const full_namemess = document.querySelector('[data-valmsg-for="KH.full_name"]');
+    user.addEventListener("input", () => {
+        if (user.value.trim().length < 5) {
+            user.setCustomValidity("Tài khoản phải chứa ít nhất 5 kí tự chữ hoặc số");
+            usermess.innerText = "Tài khoản phải chứa ít nhất 5 kí tự chữ hoặc số";
+        } else {
+            user.setCustomValidity("");
+            usermess.innerText = "";
+        }
+        $.ajax({
+            type: 'POST',
+            url: '../home/register.php',
+            data:{
+                action: "checkusername",
+                username: user.value.toLowerCase()
+            },
+            success: function(responseText) {
+                if(responseText=="false")
+                    console.log("tài khoản hợp lệ")
+                else{
+                    user.setCustomValidity("Tài khoản đã tồn tại trên hệ thống");
+                    usermess.innerText = "Tài khoản đã tồn tại trên hệ thống";
+                }
+            }
+        })
+    });
+
+    pass.addEventListener("input", () => {
+    if (pass.value.trim().length < 6 || pass.value.trim().length > 24) {
+        pass.setCustomValidity("Mật khẩu phải có từ 6 đến 24 kí tự");
+        passmess.innerText ="Mật khẩu phải có từ 6 đến 24 kí tự";
+    } else {
+        pass.setCustomValidity("");
+        passmess.innerText ="";
+    }
+    });
+
+    repass.addEventListener("input", () => {
+    if (repass.value.trim() !== pass.value.trim()) {
+        repass.setCustomValidity("Mật khẩu nhập lại không khớp");
+        repassmess.innerText ="Mật khẩu nhập lại không khớp";
+    } else {
+        repass.setCustomValidity("");
+        repassmess.innerText ="";
+    }
+    });
+
+    phone.addEventListener("input", () => {
+    if (!/^[0][0-9]{8,8}$/.test(phone.value.trim())) {
+        phone.setCustomValidity("Số điện thoại phải bắt đầu bằng số 0 và có đúng 9 chữ số");
+        phonemess.innerText ="Số điện thoại phải bắt đầu bằng số 0 và có đúng 9 dến chữ số";
+    } else {
+        phone.setCustomValidity("");
+        phonemess.innerText ="";
+    }
+    });
+    address.addEventListener("input", () => {
+    if (address.length<1) {
+        address.setCustomValidity("Địa chỉ không được rỗng");
+        addressmess.innerText ="Địa chỉ không được rỗng";
+    } else {
+        address.setCustomValidity("");
+        addressmess.innerText ="";
+    }
+    });
+    </script>
     <script>
     function TimKiem(){
         var type = $('#select').val();
@@ -168,22 +251,17 @@
         $('#phone').val('');
         $('#mail').val('');
         $('#address').val('');
-        $('#sex').val('');
+        $('#sex').val('Nam');
         $('#dateborn').val(''); 
         $('#title-modal').html('Thêm Khách Hàng ');
         $('#button_submit').html('Thêm');
-        $('#button_submit').attr('onclick', 'SubmitAddKH()');
         $('#myModal').modal();
+        $('#custommeraccount').attr('onsubmit', 'SubmitAddKH()');
+        document.getElementById('custommeraccount').removeAttribute('novalidate');
         
     }
     function SubmitAddKH() {
-        if($('#pass').val() != $('#repass').val()){
-            Swal.fire({
-                    type: 'error',
-                    title: 'mật khẩu xác nhận không cùng giá trị xin thử lại'
-                });
-            return;
-        }
+        event.preventDefault();
         $.ajax({
             url: './index.php',
             type: 'post',
@@ -225,8 +303,9 @@
         $('#title-modal').html('Sửa Khách Hàng ' + user);
         $('#user').attr('readonly', true);
         $('#button_submit').html('Sửa');
-        $('#button_submit').attr('onclick', 'SubmitEditKH()');
         $('#myModal').modal();
+        document.getElementById('custommeraccount').setAttribute('novalidate','novalidate');
+        $('#custommeraccount').attr('onsubmit', 'SubmitEditKH()');
         $.ajax({
                     type: 'POST',
                 url: './index.php',
@@ -262,13 +341,7 @@
 
     }
     function SubmitEditKH() {
-        if($('#pass').val() != $('#repass').val()){
-            Swal.fire({
-                    type: 'error',
-                    title: 'mật khẩu xác nhận không cùng giá trị xin thử lại'
-                });
-            return;
-        }
+        event.preventDefault();
         $.ajax({
             url: './index.php',
             type: 'post',
@@ -436,5 +509,5 @@
     function cc() {
         $('#myModal').modal();
     }
-    
+
 </script>

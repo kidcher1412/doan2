@@ -1,4 +1,17 @@
-<!-- Breadcrumb Form Section Begin -->
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text product-more">
+                    <a href="./home.php"><i class="fa fa-home"></i> Trang chủ</a>
+                    <span>Đăng Nhập</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Section Begin -->
 <!-- Register Section Begin -->
 <div class="register-login-section spad">
     <div class="container">
@@ -34,7 +47,7 @@
                         <button type="submit" class="site-btn login-btn">Đăng nhập</button>
                     </form>
                     <div class="switch-login">
-                        <a class="or-login" href="/Register">Tạo tài khoản</a>
+                        <a class="or-login" href="./register.php">Tạo tài khoản</a>
                     </div>
                 </div>
             </div>

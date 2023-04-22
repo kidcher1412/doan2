@@ -2,7 +2,6 @@
         include "../page/libindex.php";
         // include necessary files
         require_once('../controller/register.php');
-        require_once('../model/UserModel.php');
         $registerclass = new Register();
         if(!isset($_POST["action"])){
                 $registerclass->index();

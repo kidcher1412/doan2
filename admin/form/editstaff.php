@@ -19,7 +19,7 @@
                             
                             <div class='form-group'>
                                 <label>ID Tài khoản</label>
-                                <input required readonly type='text' class='form-control' id='userid' placeholder='Tài khoản' data-val='true' name='userid' value=''>
+                                <input readonly type='text' class='form-control' id='userid' placeholder='Tài khoản' name='userid' value=''>
                             </div>
                             <div class='form-group'>
                                 <label>Tài khoản</label>
@@ -84,7 +84,7 @@
                             
                             <div class='checkbox'>
                             </div>
-                            <button type='submit' class='btn btn-success btn-block' onclick='SubmitEditNV()' id='button_submit'>Sửa</button>
+                            <button type='submit' class='btn btn-success btn-block' id='button_submit'>Sửa</button>
                         </form>
                     </div>
                     <div class='modal-footer'>
@@ -184,8 +184,9 @@
         $('#title-modal').html('Sửa nhân viên ');
         $('#user').attr('readonly', true);
         $('#button_submit').html('Sửa');
-        $('#button_submit').attr('onclick', 'SubmitEditNV()');
         $('#myModal').modal();
+        document.getElementById('staffaccount').setAttribute('novalidate','novalidate');
+        $('#staffaccount').attr('onsubmit', 'SubmitEditNV()');
         $.ajax({
             url: './index.php',
             type: 'post',
@@ -222,6 +223,7 @@
 
     }
     function SubmitEditNV() {
+        event.preventDefault();
         $.ajax({
             url: './index.php',
             type: 'post',
@@ -363,11 +365,12 @@
         $('#permission_id').val('1');
         
         $('#button_submit').html('Thêm');
-        $('#button_submit').attr('onclick', 'SubmitThemNV()');
+        $('#staffaccount').attr('onsubmit', 'SubmitThemNV()');
+        document.getElementById('staffaccount').removeAttribute('novalidate');
     }
 
     function SubmitThemNV(){
-        $('#button_submit').focus();
+        event.preventDefault();
         $.ajax({
             url: './index.php',
             type: 'post',
@@ -458,46 +461,6 @@
         const addressmess = document.querySelector('[data-valmsg-for="NV.address"]');
         const mailmess = document.querySelector('[data-valmsg-for="NV.mail"]');
         const full_namemess = document.querySelector('[data-valmsg-for="NV.full_name"]');
-    function validateForm() {
-        const userValue = user.value.trim();
-        const passValue = pass.value.trim();
-        const repassValue = repass.value.trim();
-        const phoneValue = phone.value.trim();
-        const sexValue = getSexValue();
-        const datebornValue = dateborn.value.trim();
-
-        if (userValue.length < 5) {
-            // alert("Tài khoản phải chứa ít nhất 5 kí tự chữ hoặc số");
-            return false;
-        }
-
-        if (passValue.length < 6 || passValue.length > 24) {
-            // alert("Mật khẩu phải có từ 6 đến 24 kí tự");
-            return false;
-        }
-
-        if (passValue !== repassValue) {
-            // alert("Mật khẩu nhập lại không khớp");
-            return false;
-        }
-
-        if (!/^[0][0-9]{8,8}$/.test(phoneValue)) {
-            // alert("Số điện thoại phải bắt đầu bằng số 0 và có đúng 9 chữ số");
-            return false;
-        }
-
-        if (!sexValue) {
-            // alert("Bạn phải chọn giới tính");
-            return false;
-        }
-
-        if (datebornValue === "") {
-            // alert("Ngày sinh không được để trống");
-            return false;
-        }
-
-        return true;
-}
 
 function getSexValue() {
     for (let i = 0; i < sex.length; i++) {
@@ -564,9 +527,7 @@ function getSexValue() {
         phonemess.innerText ="";
     }
     });
-    document.querySelector("#staffaccount").addEventListener("change", function(){
-        validateForm();
-    })
+
     address.addEventListener("input", () => {
     if (address.length<1) {
         address.setCustomValidity("Địa chỉ không được rỗng");
@@ -577,8 +538,5 @@ function getSexValue() {
     }
     });
 
-    document.querySelector("#staffaccount").addEventListener("change", function(){
-        validateForm();
-    })
     
 </script>

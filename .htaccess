@@ -1,0 +1,16 @@
+RewriteEngine On
+RewriteBase /web2/
+ErrorDocument 404 /web2/404.php
+# Thay đổi đường dẫn
+RewriteRule ^home/?$ home/home.php [L]
+RewriteRule ^login/?$ home/login.php [L]
+RewriteRule ^register/?$ home/register.php [L]
+RewriteRule ^cart home/cart.php [L]
+RewriteRule ^shop/?$ home/shop.php [L]
+RewriteRule ^profile/?$ home/profile.php [L]
+RewriteRule ^admin/?$ admin/index.php [L]
+RewriteRule ^admin/?(\d+)$ admin/index.php?typeview=$1 [L]
+
+# Thiết lập môi trường
+SetEnvIf Request_URI "^/web2/home/" ENV=development
+SetEnvIf Request_URI "^/web2/admin/" ENV=production

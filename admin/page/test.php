@@ -9,6 +9,7 @@
         </div>
         <div class="row">
           <div class="col-lg-6">
+            
             <div class="card">
               <div class="card-header border-0">
                 <div class="d-flex justify-content-between">
@@ -86,6 +87,40 @@
               </h4>
             </div>
             <!-- /.card -->
+            <div class="card">
+              <div class="card-header border-0">
+                <h3 class="card-title">Hóa Đơn</h3>
+                <div class="card-tools">
+                  <a href="#" class="btn btn-sm btn-tool">
+                    <i class="fas fa-download"></i>
+                  </a>
+                  <a href="#" class="btn btn-sm btn-tool">
+                    <i class="fas fa-bars"></i>
+                  </a>
+                    <span>Sắp Xếp</span>
+                    <select style="height: 30px;" id="select-bill-type" onchange="DrawChart()">
+                      <option checked value="bill-by-month">Hiện Tổng Doanh Thu Tháng</option>
+                      <option value="bill-by-id">Hiện Tất Cả Hóa Đơn</option>
+                    </select>
+                </div>
+              </div>
+              <div style="max-height:400px;overflow: auto;"class="card-body">
+              <table class="table table-striped table-valign-middle bill-top">
+                  <thead>
+                  <tr>
+                    <th>Số Lượng Hóa Đơn</th>
+                    <th>Thời Gian Lập Hóa Đơn</th>
+                    <th>Tổng Tiền Hóa Đơn</th>
+                    <!-- <th>test</th> -->
+                  </tr>
+                  </thead>
+                  <tbody id="bill-scale">
+                  </tbody>
+                </table>
+                <!-- /.d-flex -->
+              </div>
+            </div>
+
           </div>
           <!-- /.col-md-6 -->
           <div class="col-lg-6">
@@ -111,7 +146,7 @@
                 <!-- /.d-flex -->
 
                 <div class="position-relative mb-4">
-                  <canvas id="sales-chart" height="500"></canvas>
+                  <canvas id="sales-chart" height="400"></canvas>
                 </div>
 
                 <div class="d-flex flex-row justify-content-end">
@@ -162,8 +197,8 @@
                 <!-- /.d-flex -->
               </div>
             </div>
-          </div>
-          <!-- /.col-md-6 -->
+
+            
         </div>
         <!-- /.row -->
       </div>
@@ -229,7 +264,11 @@ document.querySelector("#datezoneMin").value = year+"-01-01";
     var amountByProductIdOutput=[];
     const daymax = document.querySelector("#datezoneMax").value;
     const daymin = document.querySelector("#datezoneMin").value;
-
+    if(document.getElementById("checksoluong").checked){
+      DoanhThu = DoanhThu.filter(item => {
+        return parseInt(item.soluongton)<=document.getElementById("chisobaodong").value;
+      })
+    }
     DoanhThu = DoanhThu.filter(item => {
       const date = new Date(item.date_order.split('-').reverse().join('-'));
       return date > new Date(daymin) && date <= new Date(daymax);
@@ -249,7 +288,7 @@ document.querySelector("#datezoneMin").value = year+"-01-01";
   const groupedData = DoanhThu.reduce((acc, curr) => {
     const [day, month, year] = curr.date_order.split('-');
     const key = `${month}-${year}-${curr.product_id}`;
-
+    
     if (!acc[key]) {
       acc[key] = {
         month,
@@ -264,41 +303,94 @@ document.querySelector("#datezoneMin").value = year+"-01-01";
   }, {});
 
 const group = Object.values(groupedData);
-const result = new Map();
 
+const countUniqueBillsByDate = (DoanhThu) => {
+  const counts = {};
+  DoanhThu.forEach((item) => {
+    const monthYear = item.date_order.substr(3);
+    if (!counts[monthYear]) counts[monthYear] = {};
+    if (!counts[monthYear][item.bill_id]) counts[monthYear][item.bill_id] = 1;
+  });
+  return Object.entries(counts).map(([monthYear, bills]) => ({
+    monthYear,
+    countofBill: Object.keys(bills).length
+  }));
+};
+
+// console.log(countUniqueBillsByDate(DoanhThu)); 
+
+const result = new Map();
 for (const {month, year, price} of group) {
   const key = `${month}-${year}`;
   if (result.has(key)) {
-    result.set(key, result.get(key) + price);
+    const value = result.get(key);
+    result.set(key, { price: value.price + price, countbill: value.countbill + 1 });
   } else {
-    result.set(key, price);
+    result.set(key, { price, countbill: 1 });
   }
 }
 
 const resultArray = [];
-for (const [key, price] of result) {
-  resultArray.push({ 'monthyear': key, price });
+let countbill=0;
+for (const [key, value] of result) {
+  resultArray.push({ 'monthyear': key, price: value.price, 'countbill': countUniqueBillsByDate(DoanhThu)[countbill].countofBill });
+  countbill++;
 }
 
 console.log(resultArray);
+
+let dataBillView=[];
+    switch (document.querySelector("#select-bill-type").value) {
+      case "bill-by-month":
+        dataBillView=resultArray;
+        document.querySelector("#bill-scale").innerHTML=''
+        dataBillView.forEach(element => {
+          document.querySelector("#bill-scale").innerHTML+=`
+                  <tr>
+                    <td>${parseInt(element.countbill)}</td>
+                    <td>${element.monthyear}</td>
+                    <td>${parseInt(element.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+                  </tr>
+          `;
+        });
+        break;
+      case "bill-by-id":
+        dataBillView=resultArray;
+        document.querySelector("#bill-scale").innerHTML=''
+        dataBillView.forEach(element => {
+          document.querySelector("#bill-scale").innerHTML+=`
+            bill
+          `;
+        });
+        break;
+      default:
+        break;
+    }
+
   filteredDataArray = resultArray
 
 
     console.log(filteredDataArray)
     
-    const amountByProductId = {};
+    const products = {};
     for (let item of DoanhThu) {
-      if (amountByProductId[item.tensanpham]) {
-        amountByProductId[item.tensanpham] += parseInt(item.amount);
-        const ojpush = {id_sp:item.product_id,name_sp:item.tensanpham,amount:amountByProductId[item.tensanpham],image:item.image,price:item.price,soluongton:item.soluongton};
-        amountByProductIdOutput.push(ojpush);
+      if (products[item.product_id]) {
+        products[item.product_id].amount += parseInt(item.amount);
+        products[item.product_id].price += parseInt(item.price);
       } else {
-        amountByProductId[item.tensanpham] = parseInt(item.amount);
-        const ojpush = {id_sp:item.product_id,name_sp:item.tensanpham,amount:amountByProductId[item.tensanpham],image:item.image,price:item.price,soluongton:item.soluongton};
-        amountByProductIdOutput.push(ojpush);
+        products[item.product_id] = {
+          amount: parseInt(item.amount),
+          price: parseInt(item.price),
+          image: item.image,
+          soluongton: item.soluongton,
+          name_sp: item.tensanpham,
+        };
       }
     }
-    console.log(amountByProductIdOutput);
+
+    amountByProductIdOutput = Object.entries(products).map(([key, value]) => ({product_id: key, ...value}));
+    
+
 
     var temp = 0;
     amountByProductIdOutput.forEach(element => {
@@ -346,6 +438,7 @@ console.log(resultArray);
         }
       }
     });
+
     document.querySelector("#thongkesoluongban").innerHTML="";
     switch (document.getElementById("select-product-type").value) {
       case "tang-soluong":
@@ -363,10 +456,6 @@ console.log(resultArray);
     }
     temp = 0
 amountByProductIdOutput.forEach(element => {
-  if(document.getElementById("checksoluong").checked&&element.soluongton>=document.getElementById("chisobaodong").value){
-    //bỏ qua
-  }
-  else{
     temp +=parseInt(element.price);
     document.querySelector("#thongkesoluongban").innerHTML+=`
     <tr>
@@ -386,7 +475,7 @@ amountByProductIdOutput.forEach(element => {
                       </td>
                     </tr>
     `
-  }
+
   });
   document.querySelector(".daban").innerHTML = "Tổng số doanh thu: "+parseInt(temp).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   document.querySelector(".sotiendaban").innerHTML = parseInt(temp).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });

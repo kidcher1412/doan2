@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text product-more">
-                    <a href="/Home"><i class="fa fa-home"></i> Trang chủ</a>
+                    <a href="./home.php"><i class="fa fa-home"></i> Trang chủ</a>
                     <span>Giỏ hàng</span>
                 </div>
             </div>
@@ -75,9 +75,8 @@
                                                         }
                                 }
                                 else{
-                                    echo "Không Có Gì Trong Này Cả
-                                    
-                                    ";
+                                    // echo "Không Có Gì Trong Này Cả";
+                                    include "../page/noneincart.php";
                                     return;
                                 }
                     
@@ -181,12 +180,16 @@
                         Swal.fire({
                             type: 'success',
                             html: response
-                        });
+                        }).then((result) => {
+                            if (result.value) {
+                            location.reload();
+                            }
+                        });;
                     },
                     error: function (e) {
                         Swal.fire({
                             type: 'error',
-                            title: 'Lỗi mở khóa sản phẩm',
+                            title: 'Lấy Thông Tin Giỏ Hàng',
                             html: e.responseText
                         });
                     }
@@ -274,6 +277,7 @@
                     document.querySelector(".root").innerHTML = response;
                     var event = new Event('change');
                     document.querySelector(".row").dispatchEvent(event);
+                    getCartByAjaxinNav();
                 }
             });
         }

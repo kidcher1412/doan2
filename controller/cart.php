@@ -53,7 +53,7 @@
                         </td>
                         <td class='si-text'>
                             <div class='product-selected'>
-                                <p>".$value["price"]." x ".$value["cartAmount"]."</p>
+                                <p>".number_format($value["price"], 0, ',', '.')." x ".$value["cartAmount"]."</p>
                                 <h6>".$value["name"]."</h6>
                             </div>
                         </td>
@@ -67,7 +67,7 @@
                         </tbody></table>
                 </div>                   
                 <div class='select-total' id='loadtotalcartlayout'><span>Tổng:</span>
-                    <h5>$totalPayment đ</h5></div>
+                    <h5>".number_format($totalPayment, 0, ',', '.')." đ</h5></div>
                 <div class='select-button'>
                     <a href='./cart.php' class='primary-btn view-card'>Xem chi tiết</a>
                 </div>";

@@ -7,14 +7,14 @@ class User {
     public function __construct() {
 
         $db = new Database();
-        $query = "SELECT accounts.*, custommer.money,custommer.kh_user_id from accounts,custommer WHERE custommer.user_id = accounts.user_id";
+        $query = "SELECT custommer.kh_user_id,accounts.*, custommer.money from accounts,custommer WHERE custommer.user_id = accounts.user_id";
         $result = $db->select($query);
         while($value = $result->fetch_assoc()) {
             $user[] = $value; // Thêm mảng kết quả vào mảng
         }
         $this->user= $user;
 
-        $query = "SELECT * FROM accounts,quyens,staff WHERE staff.permission_id = quyens.permission_id and staff.user_id = accounts.user_id";
+        $query = "SELECT * FROM staff,accounts,quyens WHERE staff.permission_id = quyens.permission_id and staff.user_id = accounts.user_id";
         $result = $db->select($query);
         while($value = $result->fetch_assoc()) {
             $admin[] = $value; // Thêm mảng kết quả vào mảng
@@ -26,6 +26,25 @@ class User {
     }
     public function getUser(){
         return $this->user;
+    }
+    public function updatePasswordAccount($user_id,$oldpass,$newpass){
+        $db = new Database();
+        $query = "SELECT accounts.pass FROM accounts WHERE accounts.user_id='$user_id'";
+        $result = $db->select($query);
+        $value = $result->fetch_assoc();
+        if(password_verify($oldpass, $value["pass"])){
+            $hashed_password = password_hash($newpass, PASSWORD_DEFAULT); // Hash the password
+            $query = "UPDATE `accounts` SET `pass`='$hashed_password' WHERE accounts.user_id='$user_id'";
+            if($result = $db->update($query)){
+                echo json_encode(array('textRely' => 'success'));
+            }
+            else{
+                echo json_encode(array('textRely' => 'fail-ex'));
+            }
+        }
+        else
+            echo json_encode(array('textRely' => 'fail-pass'));
+
     }
     public function getUser_ByID($userid){
         foreach ($this->user as $value) {
@@ -219,7 +238,7 @@ class User {
                     $value = $result->fetch_assoc();
                     $khID =  $value["user_id"];
                     $query = "UPDATE custommer SET custommer.money ='10' WHERE custommer.user_id = '$userID'";
-                    if($result = $db->insert($query)){
+                    if($result = $db->update($query)){
                         echo json_encode(array('textRely' => 'success'));
                     }
                 } else {

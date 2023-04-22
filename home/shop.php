@@ -2,8 +2,6 @@
     include "../page/libindex.php";
     // include necessary files
     require_once('../controller/shop.php');
-    require_once('../model/ShopModel.php');
-    require_once('../model/ProductModel.php');
     if (!isset($_POST['action'])){
         $shop = new Shop();
         $shop->index();
@@ -14,6 +12,10 @@
     }
     if (isset($_POST['action']) && $_POST['action'] == 'addCartProduct') {
         $shop = new Shop();
+        if(isset($_POST['amount'])){
+            $shop->addProductonCart_Amount($_POST['ProductID'],$_POST['amount']);
+            exit;
+        }
         $shop->addProductonCart($_POST['ProductID']);
     }
     if (isset($_POST['SearchString'])) {

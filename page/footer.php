@@ -134,6 +134,7 @@
                 if (xhr.status === 200) {
                     console.log(JSON.parse(xhr.responseText))
                     dataView = JSON.parse(xhr.responseText)
+                    backdoordata = JSON.parse(xhr.responseText)
                     document.getElementById("TypeSeacher").innerHTML = "Kết quả tìm kiếm: "+JSON.parse(xhr.responseText)[0].type
                 // Hiển thị kết quả trả về từ máy chủ
                 } else {
@@ -156,6 +157,7 @@
                     },
                     success: (response) => {
                         dataView=JSON.parse(response);
+                        backdoordata = JSON.parse(response);
                     },
                     error: function (e) {
                         Swal.fire({
@@ -188,15 +190,16 @@
         },
         success: function(responseText) {
             if(responseText === "0"){
-                document.querySelector(".product-list").innerHTML = "Không tìm thấy Sản Phẩm";
+                document.querySelector(".product-list .row").innerHTML = "Không tìm thấy Sản Phẩm";
                 document.querySelector(".loading-more").innerHTML = "";
 
             }
             else{
                 dataView = [];
             JSON.parse(responseText).forEach(element => {
-            dataView.push(element);
+                dataView.push(element);
             });
+            backdoordata = dataView;
             document.querySelectorAll(".checkerBrand").forEach(element => {
                 element.checked = false;
             });
@@ -208,6 +211,7 @@
     else{
         console.log("gọi lệnh khi có data");
         dataView = dataView.filter(element => element.name.toLowerCase().indexOf(value) !== -1);
+        backdoordata = dataView;
         RenderView(0);
     }
         }

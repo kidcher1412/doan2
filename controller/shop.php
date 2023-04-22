@@ -1,4 +1,6 @@
 <?php 
+    require_once('../model/ShopModel.php');
+    require_once('../model/ProductModel.php');
     class Shop{
         private $db;
         public function __construct(){
@@ -22,6 +24,18 @@
         }
         $CartModel = new Cart();
         $CartModel->addnewCart($UserID,$productID);
+    }
+    public function addProductonCart_Amount($productID,$amount){
+        Session::init();
+        include "../Model/CartModel.php";
+        $UserID=Session::get("ID_User_login");
+        if(!$UserID){
+            $modal = new Modal();
+            echo 'false-login';
+            exit();
+        }
+        $CartModel = new Cart();
+        $CartModel->addnewCart_Amount($UserID,$productID,$amount);
     }
     public function getAllProduct(){
         $shopmodel = new ShopModel();

@@ -25,6 +25,20 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                                     exit();
                                 }
 ?>
+<!-- Breadcrumb Section Begin -->
+<div class="breacrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text product-more">
+                    <a href="./home.php"><i class="fa fa-home"></i> Trang chủ</a>
+                    <span>Danh sách sản phẩm</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Section Begin -->
 <section class="product-shop spad">
         <div class="container">
             <div class="row">
@@ -93,7 +107,7 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                                                 connect: true,
                                                 range: {
                                                     'min': 0,
-                                                    'max': 1000000
+                                                    'max': 10000000
                                                 }
                                             });
 
@@ -194,6 +208,8 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
     </section>
     <script>
     let filteredData=[];
+    let backdoordata=[];
+    var dataView = [];
     // function changecost(){
     //     document.querySelector("#maxamounts").value = $('#maxamounts').val(values[1]);
     //     // console.log(document.querySelector("#range-costs").value)
@@ -203,37 +219,7 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
     function filterData_ByCost(){
         const keymin =  parseInt(document.querySelector("#minamounts").value)
         const keymax =  parseInt(document.querySelector("#maxamounts").value)
-        if(document.getElementById("valueSearcher").value){
-        const valueSearcher = document.getElementById("valueSearcher").value;
-        console.log("gọi lệnh khi có searcher "+document.getElementById("valueSearcher").value)
-        $.ajax({
-            type: 'POST',
-            url: './shop.php',
-            data:{
-                action: "findProduct",
-                SearchString: valueSearcher
-            },
-            success: function(responseText) {
-                dataView = JSON.parse(responseText);
-                filteredData = dataView.filter(function(item) {
-                    return parseInt(item.price) >= keymin && parseInt(item.price) <= keymax;});
-                console.log(filteredData)
-                filteredData.sort((a, b) => {
-                        if (parseInt(a.price) > parseInt(b.price)) {
-                            return -1;
-                        }
-                        if (parseInt(a.price) < parseInt(b.price)) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-            dataView=filteredData;
-            RenderView(0)
-            }
-        });
-    }
-    else{
-            filteredData = dataView.filter(function(item) {
+        filteredData = backdoordata.filter(function(item) {
             return parseInt(item.price) >= keymin && parseInt(item.price) <= keymax;
         });
         filteredData.sort((a, b) => {
@@ -245,11 +231,10 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                         }
                         return 0;
                     });
+            const temp = dataView;
             dataView=filteredData;
-            RenderView(0)
-        }
+            RenderView(0);
     }
-    var dataView = [];
     function ShopThemSPAjax(ProductID){
     $.ajax({
         type: 'POST',
@@ -401,7 +386,6 @@ function BrandAjax(ID_brand, callback) {
             },
             success: function(responseText) {
                 dataView = JSON.parse(responseText);
-                console.log(dataView)
                 var temp =[];
                 var checkboxes = document.querySelectorAll(".checkerBrand");
                 for (var i = 0; i < checkboxes.length; i++) // Lặp lại danh sách các phần tử
@@ -426,7 +410,7 @@ function BrandAjax(ID_brand, callback) {
             if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 JSON.parse(xhr.responseText).forEach(element => {
-                dataView.push(element);
+                    dataView.push(element);
                 });
                 if(urlParams.get('type')!=null)
                     dataView=dataView.filter((item)=>{return item.product_type_id==urlParams.get('type')})
@@ -439,37 +423,38 @@ function BrandAjax(ID_brand, callback) {
         }
         }
         };
-
-        // Gửi cuộc gọi AJAX đến máy chủ để lấy dữ liệu
-        // xhr.open('POST', '../valueapi/getData.php', true);
-        // xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        // xhr.send('value=' + ID_brand + '&action=GetProduct_ByBrand');
         xhr.open('POST', '../valueapi/getData.php', true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send('value=' + ID_brand + '&action=GetProduct_ByBrand');
     }
 }
 function loadProductByBrand() {
-dataView = [];
-var checkboxes = document.querySelectorAll(".checkerBrand"); // Lấy danh sách các phần tử có class "checkmark"
-var checkboxChecked = document.querySelectorAll('.checkerBrand:checked').length;
-var count = 0;
-for (var i = 0; i < checkboxes.length; i++) { // Lặp lại danh sách các phần tử
-if (checkboxes[i].checked) { // Kiểm tra xem phần tử hiện tại có được chọn hay không
-BrandAjax(i + 1, function() {
-count++;
+    dataView = [];
+    var checkboxes = document.querySelectorAll(".checkerBrand"); // Lấy danh sách các phần tử có class "checkmark"
+    var checkboxChecked = document.querySelectorAll('.checkerBrand:checked').length;
+    var count = 0;
+    if(checkboxChecked==0){
+        // back data
+        dataView = backdoordata;
+        RenderView(0);
+        return false;
+    }
+    for (var i = 0; i < checkboxes.length; i++) { // Lặp lại danh sách các phần tử
+    if (checkboxes[i].checked) { // Kiểm tra xem phần tử hiện tại có được chọn hay không
+    BrandAjax(i + 1, function() {
+    count++;
 
-if (count === checkboxChecked) {
-    if(dataView.length>0)  
-        return RenderView(0);
-    else
-        document.querySelector(".product-list .row").innerHTML ="Không Tìm Thấy Kết Quả";
-        document.querySelector(".loading-more").innerHTML = '';
-        return document.querySelector(".product-list .row").style="overflow-y: auto;overflow-x: hidden;max-height: 103vh;";
-}
-});
-}
-}
+    if (count === checkboxChecked) {
+        if(dataView.length>0)  
+            return RenderView(0);
+        else
+            document.querySelector(".product-list .row").innerHTML ="Không Tìm Thấy Kết Quả";
+            document.querySelector(".loading-more").innerHTML = '';
+            return document.querySelector(".product-list .row").style="overflow-y: auto;overflow-x: hidden;max-height: 103vh;";
+    }
+    });
+    }
+    }
 }
 
 function RenderView(Page) {
@@ -508,7 +493,7 @@ else{
                                                                             <h5>${dataView[i].name}</h5>
                                                                         </a>
                                                                         <div class='product-price'>
-                                                                        ${dataView[i].price}
+                                                                        ${Number(dataView[i].price).toLocaleString('vi-VN')+" đ"}
                                                                         </div>
                                                                     </div>
                                                                 </div>
