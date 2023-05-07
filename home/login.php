@@ -10,6 +10,10 @@
                 $user = new Login();
                 $username = $_POST['user'];
                 $password = $_POST['pass'];
+                if($username==""||$username==" "){
+                        echo "exter space";
+                        exit();
+                }
                 $username = strtolower($username);
                 $login_check = $user->checkUserLogin($username,$password);
         }

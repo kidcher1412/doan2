@@ -28,7 +28,7 @@
             <div class="col-lg-6 offset-lg-3">
                 <div class="login-form">
                     <h2>Đăng kí</h2>
-                    <form action="RegisterAccount()" method="post">
+                    <form onsubmit="RegisterAccount(); return false;">
                         
                         <div class="group-input">
                             <label for="user">Tài khoản *</label>
@@ -238,7 +238,9 @@ function getSexValue() {
     document.querySelector(".formregister").addEventListener("change", function(){
         validateForm();
     })
+    event.preventDefault(); // ngăn chặn hành động mặc định của sự kiện submit form
     function RegisterAccount() {
+        // các lệnh xử lý khi submit form
         $.ajax({
             type: 'POST',
             url: './register.php',
@@ -255,21 +257,33 @@ function getSexValue() {
                 dateborn: dateborn.value,
             },
             success: function(responseText) {
-                if(JSON.parse(responseText).textRely=="fail")
-                    Swal.fire({
-                        type: 'error',
-                        title: "Đăng Kí Tài Khoản Không Thành Công"
-                    });
-                else{
-                    Swal.fire({
-                        type: 'success',
-                        title: "Đăng Kí Tài Khoản Thành Công"
-                        html: "Vui Lòng Đăng Nhập Ngay"
-                    }).then((result) => {
-                        if (result.value) {
-                            window.open("./login.php");
-                        }
-                    });
+                switch (responseText) {
+                    case "fail":
+                        Swal.fire({
+                            type: 'error',
+                            title: "Đăng Kí Tài Khoản Không Thành Công",
+                        });
+                        break;
+                    case "fail_username":
+                        Swal.fire({
+                            type: 'error',
+                            title: "tên tài khoản đã có trên hệ thống",
+                        });
+                        break;
+                    case "success":
+                        Swal.fire({
+                            type: 'success',
+                            title: "Đăng Kí Tài Khoản Thành Công",
+                            html: "Vui Lòng Đăng Nhập Ngay"
+                        }).then((result) => {
+                            if (result.value) {
+                                window.open("./login.php");
+                            }
+                        });
+                        break;
+                
+                    default:
+                        break;
                 }
             }
         })

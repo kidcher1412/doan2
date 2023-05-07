@@ -173,9 +173,13 @@ class User {
     }
     public function registerUser($user, $pass, $fullName, $phone, $mail, $address, $sex, $dateborn){
         $db = new Database();
-    
+        $query = "select user from accounts where user=$user";
+        if($this->getUser_ByUserName($user)){
+            echo json_encode(array('textRely' => 'fail_username'));
+            exit();
+        }
         $hashed_password = password_hash($pass, PASSWORD_DEFAULT); // Hash the password
-    
+        
         $query = "INSERT INTO accounts VALUES ('', '$user', '$hashed_password', '$fullName', '$address', '$mail', '$phone', '$sex', '$dateborn', '0', '1')";
     
         try {
