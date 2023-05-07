@@ -28,8 +28,7 @@
                                 echo json_encode(array('textRely' => 'fail'));
                                 exit();
                         }
+                        if(" làm trong này")
                         $res = $registerclass->registerUser($user,$pass,$full_name,$phone,$mail,$address,$sex,$dateborn);
                     
         }
-
-?>

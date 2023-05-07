@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        
+
     </footer>
     <!-- Footer Section End -->
     <!-- Js Plugins -->
@@ -78,38 +78,39 @@
         var checkType = "type=";
         var checkBrand = "brand=";
         var checkSearch = "SearchString=";
-        
-        if(url.indexOf(checkShop) !== -1){
-            $(".nav-menu li").removeClass( "active" );
+
+        if (url.indexOf(checkShop) !== -1) {
+            $(".nav-menu li").removeClass("active");
             $("#page_shop").addClass("active");
         }
-        if(url.indexOf(checkProduct) !== -1){
-            $(".nav-menu li").removeClass( "active" );
+        if (url.indexOf(checkProduct) !== -1) {
+            $(".nav-menu li").removeClass("active");
         }
-        if(url.indexOf(checkLogin) !== -1){
-            $(".nav-menu li").removeClass( "active" );
+        if (url.indexOf(checkLogin) !== -1) {
+            $(".nav-menu li").removeClass("active");
             $("#page_login").addClass("active");
         }
-        if(url.indexOf(checkRegister) !== -1){
-            $(".nav-menu li").removeClass( "active" );
+        if (url.indexOf(checkRegister) !== -1) {
+            $(".nav-menu li").removeClass("active");
             $("#page_register").addClass("active");
         }
-        if(url.indexOf(checkCart) !== -1){
-            $(".nav-menu li").removeClass( "active" );
+        if (url.indexOf(checkCart) !== -1) {
+            $(".nav-menu li").removeClass("active");
             $("#page_cart").addClass("active");
         }
-        
-    async function searchProduct(){
-        if(event)
+
+        async function searchProduct() {
+            if (event) {
                 event.preventDefault();
-        if(url.indexOf("shop.php")==-1){
-            event.preventDefault();
-            const urls = "./shop.php?SearchString="+document.getElementById("valueSearcher").value;
-            window.open(urls,"_parent");
+            }
+            if (url.indexOf("shop.php") == -1) {
+                event.preventDefault();
+                const urls = "./shop.php?SearchString=" + document.getElementById("valueSearcher").value;
+                window.open(urls, "_parent");
+            } else {
+                reloadpageview(0);
+            }
         }
-        else{
-            reloadpageview(0);
-        }
-}
     </script>
-</html>
+
+    </html>
