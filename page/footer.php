@@ -108,22 +108,7 @@
             window.open(urls,"_parent");
         }
         else{
-            console.log("không chuyển");
-            var value= document.querySelector("#valueSearcher").value.toLowerCase();
-            document.querySelectorAll(".checkerBrand").forEach(element => {
-                element.checked = false;
-            });
-            if(dataView.length ==0){
-                console.log("gọi lệnh khi Không có data");
-                await TypeAjax()
-                // await dataView=dataView.filter(item=>{return item.name.toLowerCase()==value})
-                RenderView(0);
-            }
-            else{
-                console.log("gọi lệnh khi có data");
-                dataView = dataView.filter(element => element.name.toLowerCase().indexOf(value) !== -1);
-                RenderView(0);
-            }
+            reloadpageview(0);
         }
 }
     </script>

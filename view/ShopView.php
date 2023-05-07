@@ -194,9 +194,10 @@
                                                     echo "#f07c29;";
                                                 else 
                                                     echo "#80736a";
-                                            echo "' href='".$url."&page=".$i."'>".$pagei."</a>
+                                            echo "' href='".$url."&page=".$i."'>".$pagei."</a>";
+                                            // echo "onclick='reloadpageview(0)'>$pagei</a>";
                         
-                                    ";
+                                    
                                   }
                         ?>
                     </div>
