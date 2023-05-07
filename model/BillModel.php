@@ -18,10 +18,14 @@
         WHERE 
             hoadons.user_nv IS NULL OR staff.nv_user_id IS NOT NULL";
             $result = $db->select($query);
-            while($value = $result->fetch_assoc()) {
-                $bill[] = $value; // Thêm mảng kết quả vào mảng output
+            if($result!=false){
+                while($value = $result->fetch_assoc()) {
+                    $bill[] = $value; // Thêm mảng kết quả vào mảng output
+                }
+                    $this->Bill = $bill;
             }
-            $this->Bill = $bill;
+            else
+                $this->Bill=false;
         }
         public function getBill(){
             return $this->Bill;
@@ -62,8 +66,12 @@
                 foreach ($carts as $value) {
                     $productClass->updateAmountadd($value["product_id"],$value["amount"]);
                 }
-            }
-            $query = "UPDATE `hoadons` SET `date_receice`='$date_receice',`status`='$status' WHERE bill_id='$bill_id'";
+            } 
+            $staff_id = Session::get("ID_ADMIN_login");
+            $query = "SELECT staff.nv_user_id FROM staff,accounts WHERE accounts.user_id=staff.user_id AND accounts.user_id='$staff_id'";
+            $result = $db->select($query);
+            $staff=$result->fetch_assoc();
+            $query = "UPDATE `hoadons` SET `user_nv`='".$staff["nv_user_id"]."',`date_receice`='$date_receice',`status`='$status' WHERE bill_id='$bill_id'";
             try {
                 if($result = $db->update($query)){
                         echo json_encode(array('textRely' => 'success'));

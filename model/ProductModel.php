@@ -308,5 +308,77 @@
                 }
             }
         }
+        public function getProductbystock($type,$name,$brand,$page,$sort,$coster){
+            $querysort =' ';
+            switch ($sort) {
+                case 'name-asc':
+                    $querysort =' ORDER BY sanphams.name ASC ';
+                    break;
+                case 'name-desc':
+                    $querysort =' ORDER BY sanphams.name DESC ';
+                    break;
+                case 'price-asc':
+                    $querysort =' ORDER BY sanphams.price ASC ';
+                    break;
+                case 'price-desc':
+                    $querysort =' ORDER BY sanphams.price DESC ';
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+            $queryfillcost='';
+            if($coster!=''){
+                $getMinMax = explode(",", $coster);
+                $queryfillcost .= " and (sanphams.price>='".$getMinMax[0]."' and sanphams.price<='".$getMinMax[1]."')";
+            }
+            $queryname = $name==''?'':"AND sanphams.name LIKE '%$name%' ";
+            $querybrand = '';
+            if($brand!=''){
+                $getallBrand = explode(",", $brand);
+                foreach ($getallBrand as $value) {
+                    $querybrand .= "OR sanphams.brand_id = '$value' ";
+                }
+                $querybrand = "AND (".preg_replace('/\bOR\b/', '', $querybrand, 1).")";
+            }
+            $querytype = '';
+            if($type!=''){
+                $getallType = explode(",", $type);
+                foreach ($getallType as $value) {
+                    $querytype .= "OR sanphams.product_type_id = '$value' ";
+                }
+                $querytype = "AND (".preg_replace('/\bOR\b/', '', $querytype, 1).")";
+            }
+            $getallquerry=$querytype.$queryname.$querybrand;
+            // $finalquerry=$getallquerry==""?"":substr(strstr($getallquerry, 'AND '), 4);
+            $finalquerry=$getallquerry==""?"":$getallquerry;
+            $query = "SELECT COUNT(*) as `amount` FROM sanphams WHERE sanphams.status=1 AND sanphams.amount>0 $finalquerry ".$queryfillcost.$querysort;
+            //lấy số lượng dữ liệu nếu có dữ liệu
+            $db = new Database();
+            if($result = $db->select($query))
+                $amount = ($result->fetch_assoc())["amount"];
+            else
+                return false;
+            //phân trang
+            $itemperpage=12;
+            $indexbrowser=$page*$itemperpage;
+            $curentbrowser=" LIMIT 12 OFFSET $indexbrowser";
+            $query = "SELECT sanphams.product_id, sanphams.product_type_id, sanphams.name AS 'name', 
+            sanphams.price AS 'price', sanphams.product_type_id, loaisanphams.name AS 'type', 
+            sanphams.img AS 'img', sanphams.use, sanphams.description, sanphams.amount, 
+            sanphams.price, sanphams.status, thuonghieus.brand_id, thuonghieus.name AS 'namethuonghieu' 
+            FROM sanphams 
+            JOIN loaisanphams ON sanphams.product_type_id = loaisanphams.product_type_id 
+            JOIN thuonghieus ON sanphams.brand_id = thuonghieus.brand_id WHERE sanphams.status=1 AND sanphams.amount>0 ".$finalquerry.$queryfillcost.$querysort.$curentbrowser;
+            if($result = $db->select($query)){
+                // thực thi trạng thái có dữ liệu
+                while($value = $result->fetch_assoc()) {
+                    $product[] = $value; // Thêm mảng kết quả vào mảng output
+                }
+                return array('amount' => $amount,'result' => $product);
+            }
+            return false;
+        }
     }
 ?>

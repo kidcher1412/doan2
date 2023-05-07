@@ -404,24 +404,25 @@ function UpdatePassword(){
                         </div>
                     </div>
                     <div class='product-list'>
-                        <div class='row'>
-                            <div class='col-lg-12'>
-                                <div class='cart-table' id='scroll'>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Mã hóa đơn</th>
-                                                <th>Số điện thoại</th>
-                                                <th>Địa chỉ</th>
-                                                <th>Ngày đặt</th>
-                                                <th>Ngày nhận</th>
-                                                <th>Tổng tiền</th>
-                                                <th>Trạng thái</th>
-                                                <th>Xem chi tiết</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id='sua_listHD'>
                                             ";
+                                        if($BillData!=false){
+                                            echo "                        <div class='row'>
+                                            <div class='col-lg-12'>
+                                                <div class='cart-table' id='scroll'>
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Mã hóa đơn</th>
+                                                                <th>Số điện thoại</th>
+                                                                <th>Địa chỉ</th>
+                                                                <th>Ngày đặt</th>
+                                                                <th>Ngày nhận</th>
+                                                                <th>Tổng tiền</th>
+                                                                <th>Trạng thái</th>
+                                                                <th>Xem chi tiết</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id='sua_listHD'>";
                                             foreach ($BillData as $value) {
                                                 echo "
                                                 <tr>
@@ -436,6 +437,8 @@ function UpdatePassword(){
                                             </tr>
                                                 ";
                                             }
+                                        }
+                                        else echo "Bạn Chưa Có Hóa Đơn Nào, Tiếp Tục Mua Sắm Nào";
                                             echo "
                                         </tbody>
                                     </table>

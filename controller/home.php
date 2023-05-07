@@ -14,7 +14,7 @@ class Home {
       // include('../view/UserView.php');
       include('../page/header.php');
       include('../view/HeroView.php');
-      include('../view/topictimelineView.php');
+      // include('../view/topictimelineView.php');
       include('../view/BannerView.php');
       // echo json_encode($heroData);
       include('../page/footer.php');

@@ -32,4 +32,30 @@
         $currentBrand = $_POST['brand'];
         include('../view/ShopView.php');
     }
+    if (isset($_POST['action']) && $_POST['action'] == 'GetProduct_ByBrand') {
+        // Tạo một đối tượng MyClass
+        $myClass = new shop();
+      
+        // Gọi hàm getData() trong MyClass
+        $myClass->GetProduct_ByBrand($_POST['value']);
+      }
+    if (isset($_POST['action']) && $_POST['action'] == 'GetProduct_ByType') {
+        // Tạo một đối tượng MyClass
+        $myClass = new shop();
+      
+        // Gọi hàm getData() trong MyClass
+        $myClass->GetProduct_ByType($_POST['value']);
+      }
+    if (isset($_POST['action']) && $_POST['action'] == 'stockdataProduct') {
+        // Tạo một đối tượng MyClass
+        $myClass = new shop();
+        $valuename = isset($_POST['name'])?$_POST['name']:"";
+        $valuetype = isset($_POST['type'])?$_POST['type']:"";
+        $valuebrand = isset($_POST['brandA'])?$_POST['brandA']:"";
+        $valuepage = isset($_POST['page'])?$_POST['page']:"0";
+        $valuesort = isset($_POST['sort'])?$_POST['sort']:"";
+        $coster = isset($_POST['coster'])?$_POST['coster']:"";
+        // Gọi hàm getData() trong MyClass
+        echo json_encode($myClass->getProductbystock($valuetype,$valuename,$valuebrand,$valuepage,$valuesort,$coster));
+      }
 ?>

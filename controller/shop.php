@@ -39,11 +39,26 @@
     }
     public function getAllProduct(){
         $shopmodel = new ShopModel();
-        echo json_encode($shopmodel->getProduct());
+        $allproduct = $shopmodel->getProduct();
+        echo json_encode($allproduct);
     }
     public function searchProduct($valueSearch){
         $shopmodel = new ProductModel();
         $shopmodel->searchProduct($valueSearch);
+    }
+    public function GetProduct_ByBrand($ID){
+        $shopmodel = new ShopModel();
+        $getData = $shopmodel->getProduct_byBrand($ID);
+        echo json_encode($getData);
+    }
+    public function GetProduct_ByType($ID){
+        $shopmodel = new ShopModel();
+        $getData = $shopmodel->GetProduct_ByType($ID);
+        echo json_encode($getData);
+    }
+    public function getProductbystock($type,$name,$brand,$page,$sort,$coster){
+        $shopmodel = new ShopModel();
+        return $shopmodel->getProductbystock($type,$name,$brand,$page,$sort,$coster);
     }
 }
 ?>

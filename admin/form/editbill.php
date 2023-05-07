@@ -178,7 +178,7 @@
             let hours = today.getHours().toString().padStart(2, '0');
             let minutes = today.getMinutes().toString().padStart(2, '0');
             let seconds = today.getSeconds().toString().padStart(2, '0');
-            date_receice = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            date_receice = `${day}-${month}-${year}`;
         }
 
         $.ajax({
@@ -231,20 +231,25 @@
                                 <td style='width: 80px; height: 80px;'><img src='`+ data[i].img +`' style='width: 100%; height: 100%;'></td>
                                 <td>`+ data[i].name +`</td>
                                 <td>`+ data[i].tenthuonghieu +`</td>
-                                <td>`+ data[i].price +`</td>
+                                <td>`+ parseInt(data[i].price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) +`</td>
                                 <td>`+ data[i].amount +`</td>
-                                <td>`+ tongtien +` đ</td>
+                                <td>`+ parseInt(tongtien).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) +`</td>
                             </tr>`;
                     }
                     $('#suacthd1').html(s);
-                    $('#id_thanhtien').html('Thành tiền: ' + thanhtien + ' đ');
+                    $('#id_thanhtien').html('Thành tiền: ' + parseInt(thanhtien).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) + ' đ');
                     $('#id_cthd').html('Chi tiết hóa đơn ' + bill_id);
+                    document.querySelector('.footer').scrollIntoView({
+                            behavior: "smooth",
+                            block: "end",
+                            duration: 500
+                    })
                 }
             },
             error: function (e) {
                 Swal.fire({
                     type: 'error',
-                    title: 'Lỗi sửa tài khoản'
+                    title: 'Lỗi Lấy Hóa Đơn'
                 });
             }
         });

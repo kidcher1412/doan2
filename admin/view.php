@@ -219,6 +219,12 @@
                                     ";
                                 
                                 foreach ($ProductData as $value) {
+                                    $words = explode(" ", $value["description"]);
+                                    $limitedWords = array_slice($words, 0, 15);
+                                    $valuedescription=implode(" ", $limitedWords) . "...";
+                                    $words = explode(" ", $value["use"]);
+                                    $limitedWords = array_slice($words, 0, 15);
+                                    $valueuse=implode(" ", $limitedWords) . "...";
                                     $status = $value["status"] == "1"? "Còn Bán":"Hết Bán";
                                     echo "
                                     <tr>
@@ -229,8 +235,8 @@
                                     <td>".$value["brand_id"]."</td>
                                     <td>".$value["amount"]."</td>
                                     <td>".$value["price"]."</td>
-                                    <td>".$value["description"]."</td>
-                                    <td>".$value["use"]."</td>
+                                    <td title='".$value["description"]."'>".$valuedescription."</td>
+                                    <td title='".$value["use"]."'>".$valueuse."</td>
                                         <td>$status</td>
                                     <td>
                                         ";
@@ -744,20 +750,8 @@ echo "
                         </div>
                         <div class='content table-responsive table-full-width' id='id1'>
                             <table class='table table-hover table-striped'>
-                                <thead>
-                                <th>Mã hóa đơn</th>
-                                <th>Mã khách hàng</th>
-                                <th>Mã nhân viên</th>
-                                <th>Số điện thoại</th>
-                                <th>Địa chỉ</th>                                
-                                <th>Ngày đặt</th>
-                                <th>Ngày nhận</th>
-                                <th>Thành tiền</th>
-                                <th>Trạng thái</th>
-                                <th>Hành động</th>
-                                </thead>
-                                <tbody id='suahd1'> 
 ";
+        if($BillData!=false){
             foreach ($BillData as $value) {
                 if($value["status"] == 1){
                     $status = "Chờ Xử Lý";
@@ -778,6 +772,19 @@ echo "
                 <button data-toggle='tooltip' title='' class='pd-setting-ed' data-original-title='Trash' onclick='ViewCTHD(".$value["bill_id"].")'><i class='pe-7s-look'></i></button>
                 ";
                 echo "
+                <thead>
+                <th>Mã hóa đơn</th>
+                <th>Mã khách hàng</th>
+                <th>Mã nhân viên</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ</th>                                
+                <th>Ngày đặt</th>
+                <th>Ngày nhận</th>
+                <th>Thành tiền</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+                </thead>
+                <tbody id='suahd1'> 
                 <tr>
                 <td>".$value["bill_id"]."</td>
                 <td>".$value["user_kh"]."</td>
@@ -799,6 +806,9 @@ echo "
             </tr>
                 ";
             }
+        }
+        else
+            echo "Không có Hóa Đơn";
             echo "
                                 </tbody>
                             </table>

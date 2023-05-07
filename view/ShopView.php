@@ -1,29 +1,14 @@
 <?php
-$currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
+                                $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                                 $currentType = empty($_GET["type"]) ? "" : $_GET["type"];
-                                // $currentBrand = empty($_GET["brand"]) ? "" : $_GET["brand"];
+                                $currentBrand = empty($_GET["brand"]) ? "" : $_GET["brand"];
+                                $currentSeacher = empty($_GET["SearchString"]) ? "" : $_GET["SearchString"];
+                                $currentTypeUrl = empty($_GET["type"]) ? "" : "&type=".$_GET["type"];
+                                $currentBrandUrl = empty($_GET["brand"]) ? "" : "&brand=".$_GET["brand"];
+                                $currentSeacherUrl = empty($_GET["SearchString"]) ? "" : "&SearchString=".$_GET["SearchString"];
+                                $url="?".$currentTypeUrl.$currentBrandUrl.$currentSeacherUrl;
                                 $itemsPerPage = 12;
                                 $indexItem = $currentPage*$itemsPerPage;
-                                if($currentType == ""){
-                                    $productData = $shopmodel->getProduct();
-                                    $url = "?";
-                                }
-                                else{
-                                    $productData = $shopmodel->getProduct_byTYPE($currentType);
-                                    if(!$productData) {
-                                        echo "không tìm thấy loại sản phẩm";
-                                        include('../view/BannerView.php');
-                                        include "../page/footer.php";
-                                        exit();
-                                    }
-                                    $url = "?type=".$_GET["type"]."&";
-                                }
-                                if($currentPage>count($productData)/$itemsPerPage){
-                                    echo "Lỗi Truy Xuất Trang";
-                                    include('../view/BannerView.php');
-                                    include "../page/footer.php";
-                                    exit();
-                                }
 ?>
 <!-- Breadcrumb Section Begin -->
 <div class="breacrumb-section">
@@ -44,7 +29,7 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
                     <div class="filter-widget">
-                        <h4 class="fw-title">Danh mục</h4>
+                        <h4 class="fw-title">Chỉ Hiện Danh mục</h4>
                         <ul class="filter-catagories">
                                     <!-- <li><a href="/Shop/Index/?Type=1">Trang &#x111;i&#x1EC3;m</a></li> -->
                             <?php 
@@ -52,14 +37,17 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                                 foreach ($shopmodel->getType() as $value) {
                                     $demcatelogry++;
                                     echo "
-                                    <li><a href='../home/shop.php?type=$demcatelogry'>".$value["name"]."</a></li>
+                                    <li>
+                                        <input type='checkbox' class='checkerType' id='type". $demcatelogry."' style='cursor:pointer' onclick='reloadpageview(0)'>
+                                        <label for='type". $demcatelogry."' style='cursor:pointer'>".$value["name"]."</label>
+                                    </li>
                                     ";
                                 }
                             ?>
                         </ul>
                     </div>
                     <div class="filter-widget">
-                        <h4 class="fw-title">Thương hiệu</h4>
+                        <h4 class="fw-title">Chỉ Hiện Thương hiệu</h4>
                         <div class="fw-brand-check scrollpane">
                                     <!-- <div class="bc-item">
                                         <label for=1>
@@ -76,7 +64,7 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                                     <div class='bc-item'>
                                         <label for=$dembrand>
                                             ".$value["name"]."
-                                            <input class='checkerBrand' type='checkbox' id=$dembrand onclick='loadProductByBrand()'>
+                                            <input class='checkerBrand' type='checkbox' id=$dembrand onclick='reloadpageview(0)'>
                                             <span class='checkmark'></span>
                                         </label>
                                     </div>
@@ -103,19 +91,19 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                                             var slider = document.getElementById('slider');
 
                                             noUiSlider.create(slider, {
-                                                start: [0, 100000000],
+                                                start: [0, 2000000],
                                                 connect: true,
                                                 range: {
                                                     'min': 0,
-                                                    'max': 10000000
+                                                    'max': 2000000
                                                 }
                                             });
 
                                             // Sự kiện update
                                             slider.noUiSlider.on('update', function(values, handle) {
                                                 // Lấy giá trị của input
-                                                $('#minamounts').val(values[0]);
-                                                $('#maxamounts').val(values[1]);
+                                                $('#minamounts').val(parseInt(values[0]));
+                                                $('#maxamounts').val(parseInt(values[1]));
                                             });
                                         });
                                     </script>
@@ -123,6 +111,7 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                             </div>
                         </div>
                         <a class="filter-btn" onclick="filterData_ByCost()" style="cursor: pointer;">Lọc</a>
+                        <a class="filter-btn"  onclick="cancel_filterData_ByCost()" style="cursor: pointer; background:red">Hủy Tham số lọc</a>
                     </div>
                     
                 </div>
@@ -136,7 +125,7 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                             </div>
                             <div class="col-lg-4 col-md-4 text-right">
                                 <div class="select-option">
-                                    <select class="thien-sort" id="sort" onchange="changesort()">
+                                    <select class="thien-sort" id="sort" onchange="reloadpageview(0)">
                                         <option value="">Sắp xếp: Mặc định</option>
                                         <option value="name-asc">Sắp xếp theo tên từ A-Z</option>
                                         <option value="name-desc">Sắp xếp theo tên từ Z-A</option>
@@ -151,14 +140,23 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                     <div class="product-list">
                         <div class="row">
                 
-                            <?php 
-                                    for ($i = $indexItem; $i < $indexItem+$itemsPerPage; $i++) {
+                            <?php
+                                $getcherdata = $shopmodel->getProductbystock($currentType,$currentSeacher,$currentBrand,$currentPage,'','');
+                                    if($getcherdata==false){
+                                            echo "Yêu Cầu Truy Xuất Không Hợp Lệ, Vui Lòng Kiểm Tra Lại Hoặc Báo cho ADMIN Được Biết</div></div></div></section>";
+                                            include('../view/BannerView.php');
+                                            include "../page/footer.php";
+                                            exit();
+                                    }
+                                    $totalPage = $getcherdata["amount"]/$itemsPerPage;
+                                    $productData = $getcherdata["result"];
+                                
+                                    for ($i = 0; $i < $itemsPerPage; $i++) {
                                         if($i>=count($productData)){
                                             break;
                                         }
                                         $keyproduct = $i+1;
-                                        if($productData[$i]["status"]!=0)
-                                            echo "
+                                        echo "
                                         <div class='col-lg-4 col-sm-6'>
                                         <div class='product-item'>
                                                                             <div class='pi-pic'>
@@ -187,7 +185,7 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                     </div>
                     <div class="loading-more">
                         <?php 
-                                for($i = 0;$i<count($productData)/$itemsPerPage;$i++){
+                                for($i = 0;$i<$totalPage;$i++){
                                     $pagei = $i+1;
                                     echo "
                                             
@@ -196,7 +194,7 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
                                                     echo "#f07c29;";
                                                 else 
                                                     echo "#80736a";
-                                            echo "' href='".$url."page=".$i."'>".$pagei."</a>
+                                            echo "' href='".$url."&page=".$i."'>".$pagei."</a>
                         
                                     ";
                                   }
@@ -210,360 +208,146 @@ $currentPage = empty($_GET["page"]) ? "0" : $_GET["page"];
     let filteredData=[];
     let backdoordata=[];
     var dataView = [];
-    // function changecost(){
-    //     document.querySelector("#maxamounts").value = $('#maxamounts').val(values[1]);
-    //     // console.log(document.querySelector("#range-costs").value)
-    //     // filterData_ByCost()
-    // }
-    // changecost();
+    var costercheck=''
     function filterData_ByCost(){
-        const keymin =  parseInt(document.querySelector("#minamounts").value)
-        const keymax =  parseInt(document.querySelector("#maxamounts").value)
-        filteredData = backdoordata.filter(function(item) {
-            return parseInt(item.price) >= keymin && parseInt(item.price) <= keymax;
-        });
-        filteredData.sort((a, b) => {
-                        if (parseInt(a.price) > parseInt(b.price)) {
-                            return -1;
-                        }
-                        if (parseInt(a.price) < parseInt(b.price)) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-            const temp = dataView;
-            dataView=filteredData;
-            RenderView(0);
+        const keymin =  parseInt(document.querySelector("#minamounts").value);
+        const keymax =  parseInt(document.querySelector("#maxamounts").value);
+        costercheck = keymin.toString()+","+keymax.toString();
+        reloadpageview(0);
+    }
+    function cancel_filterData_ByCost(){
+        costercheck = '';
+        $('#minamounts').val(0);
+        $('#maxamounts').val(0);
+        reloadpageview(0);
     }
     function ShopThemSPAjax(ProductID){
-    $.ajax({
-        type: 'POST',
-        url: './shop.php',
-        data:{
-            action: "addCartProduct",
-            ProductID: ProductID
-        },
-        success: function(responseText) {
-            if(responseText=='false-login'){
-                Swal.fire({
-                    type: 'error',
-                    title: 'Vui Lòng Đăng Nhập để Thêm Giỏ Hàng',
-                    html: "<a href='./login.php'>Đăng Nhập Ngay</a>"
-                });
-                return;
-            }
-            if(responseText=='false-slg'){
-                Swal.fire({
-                    type: 'error',
-                    title: 'Hàng Không Đủ để có thể thêm vào giỏ hàng',
-                    html: "liên hệ với chúng tôi để phản ảnh tình trạng hàng hóa"
-                });
-                return;
-            }
-            else{
-                Swal.fire({
-                    type: 'success',
-                    title: responseText
-                });
-            }
-            getCartByAjaxinNav();
-        }
-    });
-}
-//
-function changesort(){
-    if(dataView.length < 1){
-        console.log("không có dữ liệu")
-        $.ajax({
-        type: 'POST',
-        url: './shop.php',
-        data:{
-            action: "getallProduct",
-        },
-        success: function(responseText) {
-                dataView = [];
-            JSON.parse(responseText).forEach(element => {
-            dataView.push(element);
-            });
-            if(document.querySelector("#sort").value == 'name-asc')
-                dataView.sort((a, b) => {
-                    if (a.name < b.name) {
-                        return -1;
-                    }
-                    if (a.name > b.name) {
-                        return 1;
-                    }
-                    return 0;
-                });
-            if(document.querySelector("#sort").value == 'name-desc')
-                dataView.sort((a, b) => {
-                        if (a.name > b.name) {
-                            return -1;
-                        }
-                        if (a.name < b.name) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-            if(document.querySelector("#sort").value == 'price-asc')
-                dataView.sort((a, b) => {
-                        if (parseFloat(a.price) < parseFloat(b.price)) {
-                            return -1;
-                        }
-                        if (parseFloat(a.price) > parseFloat(b.price)) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-            if(document.querySelector("#sort").value == 'price-desc')
-                dataView.sort((a, b) => {
-                        if (parseFloat(a.price) > parseFloat(b.price)) {
-                            return -1;
-                        }
-                        if (parseFloat(a.price) < parseFloat(b.price)) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-            RenderView(0);
-        }
-    });
-    }
-    else{
-        if(document.querySelector("#sort").value == 'name-asc')
-                dataView.sort((a, b) => {
-                    if (a.name < b.name) {
-                        return -1;
-                    }
-                    if (a.name > b.name) {
-                        return 1;
-                    }
-                    return 0;
-                });
-            if(document.querySelector("#sort").value == 'name-desc')
-                dataView.sort((a, b) => {
-                        if (a.name > b.name) {
-                            return -1;
-                        }
-                        if (a.name < b.name) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-            if(document.querySelector("#sort").value == 'price-asc')
-                dataView.sort((a, b) => {
-                        if (parseFloat(a.price) < parseFloat(b.price)) {
-                            return -1;
-                        }
-                        if (parseFloat(a.price) > parseFloat(b.price)) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-            if(document.querySelector("#sort").value == 'price-desc')
-                dataView.sort((a, b) => {
-                        if (parseFloat(a.price) > parseFloat(b.price)) {
-                            return -1;
-                        }
-                        if (parseFloat(a.price) < parseFloat(b.price)) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-            RenderView(0);
-    }
-}
-function BrandAjax(ID_brand, callback) {
-    if(document.getElementById("valueSearcher").value){
-        const valueSearcher = document.getElementById("valueSearcher").value;
-        console.log("gọi lệnh khi có searcher "+document.getElementById("valueSearcher").value)
         $.ajax({
             type: 'POST',
             url: './shop.php',
             data:{
-                action: "findProduct",
-                SearchString: valueSearcher
+                action: "addCartProduct",
+                ProductID: ProductID
             },
             success: function(responseText) {
-                dataView = JSON.parse(responseText);
-                var temp =[];
-                var checkboxes = document.querySelectorAll(".checkerBrand");
-                for (var i = 0; i < checkboxes.length; i++) // Lặp lại danh sách các phần tử
-                    if (checkboxes[i].checked) {
-                        dataView.filter((item) => {
-                            return item.brand_id == i+1;
-                        }).forEach(element => {
-                            temp.push(element);
-                        });
-                    }
-                dataView=temp;
-                RenderView(0);
+                if(responseText=='false-login'){
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Vui Lòng Đăng Nhập để Thêm Giỏ Hàng',
+                        html: "<a href='./login.php'>Đăng Nhập Ngay</a>"
+                    });
+                    return;
+                }
+                if(responseText=='false-slg'){
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Hàng Không Đủ để có thể thêm vào giỏ hàng',
+                        html: "liên hệ với chúng tôi để phản ảnh tình trạng hàng hóa"
+                    });
+                    return;
+                }
+                else{
+                    Swal.fire({
+                        type: 'success',
+                        title: responseText
+                    });
+                }
+                getCartByAjaxinNav();
             }
         });
+}
+function reloadpageview(page) {
+    const typebox =document.querySelectorAll(".checkerType");
+    const brandbox =document.querySelectorAll(".checkerBrand");
+    let ajaxType = '';
+    let ajaxBrand = '';
+    for (let index = 0; index < typebox.length; index++) {
+        if(typebox[index].checked)
+            ajaxType+=(index+1)+","
+    }
+    for (let index = 0; index < brandbox.length; index++) {
+        if(brandbox[index].checked)
+            ajaxBrand+=(index+1)+","
+    }
+    if(ajaxType!="")
+        ajaxType=ajaxType.slice(0, -1);
+    if(ajaxBrand!="")
+        ajaxBrand=ajaxBrand.slice(0, -1);
+    const searcher=document.querySelector("#valueSearcher").value!=""?document.querySelector("#valueSearcher").value:"";
+    const sorter=document.querySelector(".thien-sort").value;
+    $.ajax({
+            type: 'POST',
+            url: './shop.php',
+            data:{
+                action: "stockdataProduct",
+                type: ajaxType,
+                brandA: ajaxBrand,
+                name: searcher,
+                page: page,
+                sort:sorter,
+                coster: costercheck
+            },
+            success: function(responseText) {
+                console.log(JSON.parse(responseText));
+                dataView=JSON.parse(responseText);
+                RenderView(page)
+            }
+        });
+
+}
+function RenderView(Page) {
+    document.querySelector('.logo').scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+            duration: 500
+    })
+    document.querySelector(".product-list .row").innerHTML ="";
+    document.querySelector(".loading-more").innerHTML = '';
+    if(dataView==false){
+        document.querySelector(".product-list .row").innerHTML ="Không Tìm Thấy Kết Quả Phù Hợp";
+        document.querySelector(".loading-more").innerHTML = '';
         return;
     }
+    const itemsPerPage = 12;
+    const indexItem = 0;
+    for (let i = indexItem; i < indexItem+itemsPerPage; i++){
+    if(i>=dataView.result.length)
+        break;
     else{
-        var xhr = new XMLHttpRequest();
-
-        // Thiết lập hàm xử lý sự kiện để xử lý kết quả trả về từ máy chủ
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                JSON.parse(xhr.responseText).forEach(element => {
-                    dataView.push(element);
-                });
-                if(urlParams.get('type')!=null)
-                    dataView=dataView.filter((item)=>{return item.product_type_id==urlParams.get('type')})
-                console.log("thêm " + ID_brand + " thành công")
-            // document.getElementById("TypeSeacher").innerHTML = "Kết quả tìm kiếm: "+JSON.parse(xhr.responseText).name
-            // Hiển thị kết quả trả về từ máy chủ
-                callback();
-            } else {
-        console.log('Lỗi khi thực hiện cuộc gọi AJAX.');
-        }
-        }
-        };
-        xhr.open('POST', '../valueapi/getData.php', true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.send('value=' + ID_brand + '&action=GetProduct_ByBrand');
-    }
-}
-function loadProductByBrand() {
-    dataView = [];
-    var checkboxes = document.querySelectorAll(".checkerBrand"); // Lấy danh sách các phần tử có class "checkmark"
-    var checkboxChecked = document.querySelectorAll('.checkerBrand:checked').length;
-    var count = 0;
-    if(checkboxChecked==0){
-        // back data
-        dataView = backdoordata;
-        RenderView(0);
-        return false;
-    }
-    for (var i = 0; i < checkboxes.length; i++) { // Lặp lại danh sách các phần tử
-    if (checkboxes[i].checked) { // Kiểm tra xem phần tử hiện tại có được chọn hay không
-    BrandAjax(i + 1, function() {
-    count++;
-
-    if (count === checkboxChecked) {
-        if(dataView.length>0)  
-            return RenderView(0);
-        else
-            document.querySelector(".product-list .row").innerHTML ="Không Tìm Thấy Kết Quả";
-            document.querySelector(".loading-more").innerHTML = '';
-            return document.querySelector(".product-list .row").style="overflow-y: auto;overflow-x: hidden;max-height: 103vh;";
-    }
-    });
-    }
-    }
-}
-
-function RenderView(Page) {
-document.querySelector('.logo').scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-        duration: 500
-})
-document.querySelector(".product-list .row").innerHTML ="";
-document.querySelector(".loading-more").innerHTML = '';
-if(dataView.length==0){
-    document.querySelector(".product-list .row").innerHTML ="Không Tìm Thấy Kết Quả Phù Hợp";
-    document.querySelector(".loading-more").innerHTML = '';
-    return;
-}
-const itemsPerPage = 12;
-const indexItem = Page*itemsPerPage;
-for (let i = indexItem; i < indexItem+itemsPerPage; i++){
-if(i>=dataView.length)
-    break;
-else{
-    document.querySelector(".product-list .row").innerHTML +=`
-<div class='col-lg-4 col-sm-6'>
-                                <div class='product-item'>
-                                                                    <div class='pi-pic'>
-                                                                        <img src='${dataView[i].img}' alt=''>
-                                                                        <ul>
-                                                                            <li class='w-icon active'><a onclick='ShopThemSPAjax(${dataView[i].product_id})'><i class='icon_bag_alt'></i></a></li>
-                                                                            <li class='quick-view'><a href='../home/product.php?product_id=${dataView[i].product_id}'>Xem chi tiết</a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                    <div class='pi-text'>
-                                                                                    <div class='catagory-name'>${dataView[i].type}</div>
-                                                                        
-                                                                        <a href='../home/product.php?product_id=${dataView[i].product_id}'>
-                                                                            <h5>${dataView[i].name}</h5>
-                                                                        </a>
-                                                                        <div class='product-price'>
-                                                                        ${Number(dataView[i].price).toLocaleString('vi-VN')+" đ"}
+        document.querySelector(".product-list .row").innerHTML +=`
+    <div class='col-lg-4 col-sm-6'>
+                                    <div class='product-item'>
+                                                                        <div class='pi-pic'>
+                                                                            <img src='${dataView.result[i].img}' alt=''>
+                                                                            <ul>
+                                                                                <li class='w-icon active'><a onclick='ShopThemSPAjax(${dataView.result[i].product_id})'><i class='icon_bag_alt'></i></a></li>
+                                                                                <li class='quick-view'><a href='../home/product.php?product_id=${dataView.result[i].product_id}'>Xem chi tiết</a></li>
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class='pi-text'>
+                                                                                        <div class='catagory-name'>${dataView.result[i].type}</div>
+                                                                            
+                                                                            <a href='../home/product.php?product_id=${dataView.result[i].product_id}'>
+                                                                                <h5>${dataView.result[i].name}</h5>
+                                                                            </a>
+                                                                            <div class='product-price'>
+                                                                            ${Number(dataView.result[i].price).toLocaleString('vi-VN')+" đ"}
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                </div>
-`;
-document.querySelector(".loading-more").innerHTML = '';
-for(let i = 0;i<dataView.length/itemsPerPage;i++){
-    
-    document.querySelector(".loading-more").innerHTML +=`
-                                    
-                                    <a style='color:#80736a' onclick='RenderView(${i})'>${i+1}</a>
-                
-                            `;
-}
-confillloadmore(Page,(parseInt(dataView.length/itemsPerPage)+1));
-}
-}
-// return document.querySelector(".product-list .row").style="overflow-y: auto;overflow-x: hidden;max-height: 103vh;";
-}
-function RenderViewItem(Page,Item) {
-    dataView = Item;
-document.querySelector('.logo').scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-        duration: 500
-})
-document.querySelector(".product-list .row").innerHTML ="";
-if(Item.length==0){
-    document.querySelector(".product-list .row").innerHTML ="Không Tìm Thấy Kết Quả Phù Hợp";
+                                                                    </div>
+    `;
     document.querySelector(".loading-more").innerHTML = '';
-    return;
-}
-const itemsPerPage = 12;
-const indexItem = Page*itemsPerPage;
-for (let i = indexItem; i < indexItem+itemsPerPage; i++){
-if(i>=Item.length)
-    break;
-else{
-    document.querySelector(".product-list .row").innerHTML +=`
-<div class='col-lg-4 col-sm-6'>
-                                <div class='product-item'>
-                                                                    <div class='pi-pic'>
-                                                                        <img src='${Item[i].img}' alt=''>
-                                                                        <ul>
-                                                                            <li class='w-icon active'><a onclick='ShopThemSPAjax(${Item[i].product_id})'><i class='icon_bag_alt'></i></a></li>
-                                                                            <li class='quick-view'><a href='../home/product.php?product_id=${Item[i].product_id}'>Xem chi tiết</a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                    <div class='pi-text'>
-                                                                                    <div class='catagory-name'>${Item[i].type}</div>
-                                                                        
-                                                                        <a href='../home/product.php?product_id=${Item[i].product_id}'>
-                                                                            <h5>${Item[i].name}</h5>
-                                                                        </a>
-                                                                        <div class='product-price'>
-                                                                        ${Item[i].price}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                </div>
-`;
-document.querySelector(".loading-more").innerHTML = '';
-for(let i = 0;i<Item.length/itemsPerPage;i++){
-    document.querySelector(".loading-more").innerHTML +=`
-                                    
-                                    <a style='color:#80736a' onclick='RenderViewItem(${i},filteredData)'>${i+1}</a>
-                
-                            `;
-}
-}
+    for(let i = 0;i<dataView.amount/itemsPerPage;i++){
+        
+        document.querySelector(".loading-more").innerHTML +=`
+                                        
+                                        <a style='color:#80736a' onclick='reloadpageview(${i})'>${i+1}</a>
+                    
+                                `;
+    }
+    confillloadmore(Page,(parseInt(dataView.amount/itemsPerPage)+1));
+    }
 }
 // return document.querySelector(".product-list .row").style="overflow-y: auto;overflow-x: hidden;max-height: 103vh;";
 }
@@ -619,7 +403,7 @@ function confillloadmore(current_page, total_pages) {
     prev_link.textContent = "Prev";
     prev_link.style.color = "#f07c29";
     prev_link.onclick = function () {
-      RenderView(current_page - 1);
+        reloadpageview(current_page - 1);
     };
     page_links.appendChild(prev_link);
   }
@@ -634,7 +418,7 @@ function confillloadmore(current_page, total_pages) {
     } else {
       page_link.onclick = (function (i) {
         return function () {
-          RenderView(i-1);
+            reloadpageview(i-1);
         };
       })(i);
     }
@@ -650,7 +434,7 @@ function confillloadmore(current_page, total_pages) {
     next_link.textContent = "Next";
     next_link.style.color = "#f07c29";
     next_link.onclick = function () {
-      RenderView(current_page + 1);
+        reloadpageview(current_page + 1);
     };
     page_links.appendChild(next_link);
   }
