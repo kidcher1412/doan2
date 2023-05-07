@@ -202,7 +202,7 @@ $indexItem = $currentPage * $itemsPerPage;
                             echo "#f07c29;";
                         else
                             echo "#80736a";
-                        echo "' href='" . $url . "&page=" . $i . "'>" . $pagei . "</a>
+                        echo "' onclick='reloadpageview($i)'>" . $pagei . "</a>
                         
                                     ";
                     }
@@ -217,7 +217,9 @@ $indexItem = $currentPage * $itemsPerPage;
     let backdoordata = [];
     var dataView = [];
     var costercheck = ''
-
+    var urlParamscheckerfind = new URLSearchParams(window.location.search);
+    if(urlParamscheckerfind.get('SearchString')!=null)
+        document.querySelector("#valueSearcher").value=urlParamscheckerfind.get('SearchString');
     function filterData_ByCost() {
         const keymin = parseInt(document.querySelector("#minamounts").value);
         const keymax = parseInt(document.querySelector("#maxamounts").value);
@@ -373,7 +375,7 @@ $indexItem = $currentPage * $itemsPerPage;
         var currentIndex = -1;
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
-            var pageNumber = parseInt(node.getAttribute("href").match(/page=(\d+)/)[1]);
+            var pageNumber = parseInt(node.getAttribute("onclick").match(/\d+/)[0]);
             if (pageNumber === currentPage) {
                 currentIndex = i;
                 break;
@@ -383,12 +385,12 @@ $indexItem = $currentPage * $itemsPerPage;
         // Tính toán vị trí của các nút trang cần hiển thị
         var minIndex = Math.max(currentIndex - 3, 0);
         var maxIndex = Math.min(currentIndex + 3, nodes.length - 1);
-
+        console.log(parseInt(currentPage));
         // Hiển thị các nút trang
         var container = document.querySelector(".loading-more");
         container.innerHTML = "";
-        if (minIndex > 0) {
-            container.innerHTML += '<a style="color: #f07c29;" href="?page=' + (currentPage - 1) + '">Prev</a>';
+        if (currentPage > 0) {
+            container.innerHTML += "<a style='color: #f07c29;' onclick='reloadpageview("+(parseInt(currentPage) - 1)+")'>Prev</a>";
         }
         for (var i = minIndex; i <= maxIndex; i++) {
             var node = nodes[i].cloneNode(true);
@@ -397,9 +399,9 @@ $indexItem = $currentPage * $itemsPerPage;
             }
             container.appendChild(node);
         }
-        if (maxIndex < nodes.length - 1) {
-            const gettype = url.indexOf("type=") > -1 ? "type=" + urlParams.get('type') + "&" : "";
-            container.innerHTML += '<a style="color: #f07c29;" href="?' + gettype + 'page=' + (currentPage + 1) + '">Next</a>';
+        console.log(currentPage+"  "+ nodes.length)
+        if (currentPage < nodes.length - 1) {
+            container.innerHTML += "<a style='color: #f07c29;' onclick='reloadpageview("+(parseInt(currentPage) + 1)+")'>Next</a>";
         }
     }
     document.addEventListener("DOMContentLoaded", function(event) {

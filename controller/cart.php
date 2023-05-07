@@ -31,7 +31,7 @@
             include('../view/CartView.php');
         }
         else{
-            echo "Không có gì trong giỏ hàng cả";
+            include "../page/noneincart.php";
         }
        }
        public function rederSiteCartinNav(){

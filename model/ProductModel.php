@@ -148,7 +148,10 @@
         }
         public function editProduct($product_id,$product_type_id,$brand_id, $name, $amount, $price,$description , $use,$img) {
             $db = new Database();
-            $query = "UPDATE sanphams SET product_type_id='$product_type_id',brand_id='$brand_id',name='$name',amount='$amount',price='$price',sanphams.use='$use',sanphams.description='$description'  WHERE product_id = '$product_id'";
+            $queryupdateimg = ' ';
+            if($img!='')
+                $queryupdateimg = " ,img='".$img."' ";
+            $query = "UPDATE sanphams SET product_type_id='$product_type_id',brand_id='$brand_id',name='$name',amount='$amount',price='$price',sanphams.use='$use',sanphams.description='$description' ".$queryupdateimg." WHERE product_id = '$product_id'";
 
             try {
                 if($result = $db->update($query)){

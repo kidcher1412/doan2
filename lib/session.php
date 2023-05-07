@@ -35,8 +35,8 @@ class Session {
    }
    public static function checkLoginADMIN(){
       self::init();
-      if (!self::get("admin")) {
-         header("Location:../upload/login.php");
+      if (self::get("ADMINlogin")) {
+         header("Location:../admin/");
       }
    }
   

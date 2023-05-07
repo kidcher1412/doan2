@@ -227,9 +227,9 @@ function getSexValue() {
     });
 
     phone.addEventListener("input", () => {
-    if (!/^[0][0-9]{8,8}$/.test(phone.value.trim())) {
-        phone.setCustomValidity("Số điện thoại phải bắt đầu bằng số 0 và có đúng 9 chữ số");
-        phonemess.innerText ="Số điện thoại phải bắt đầu bằng số 0 và có đúng 9 dến chữ số";
+    if (!/^0\d{7,10}$/.test(phone.value.trim())) {
+        phone.setCustomValidity("Số điện thoại phải bắt đầu bằng số 0 và có từ 10 đến 11 số");
+        phonemess.innerText ="Số điện thoại phải bắt đầu bằng số 0 và có từ 10 đến 11 số";
     } else {
         phone.setCustomValidity("");
         phonemess.innerText ="";
@@ -238,8 +238,8 @@ function getSexValue() {
     document.querySelector(".formregister").addEventListener("change", function(){
         validateForm();
     })
-    event.preventDefault(); // ngăn chặn hành động mặc định của sự kiện submit form
     function RegisterAccount() {
+        // event.preventDefault(); // ngăn chặn hành động mặc định của sự kiện submit form
         // các lệnh xử lý khi submit form
         $.ajax({
             type: 'POST',
@@ -257,7 +257,7 @@ function getSexValue() {
                 dateborn: dateborn.value,
             },
             success: function(responseText) {
-                switch (responseText) {
+                switch (JSON.parse(responseText).textRely) {
                     case "fail":
                         Swal.fire({
                             type: 'error',
@@ -270,6 +270,37 @@ function getSexValue() {
                             title: "tên tài khoản đã có trên hệ thống",
                         });
                         break;
+                    case "fail_pass":
+                        Swal.fire({
+                            type: 'error',
+                            title: "Mật khẩu phải có từ 6 đến 24 và không chứa kí tự đặc biệt",
+                        });
+                        break;
+                    case "fail_name":
+                        Swal.fire({
+                            type: 'error',
+                            title: "Họ tên không được chứa kí tự đặc biệt và kí tự số",
+                        });
+                        break;
+                        fail_phone
+                    case "fail_phone":
+                        Swal.fire({
+                            type: 'error',
+                            title: "Số điện thoại từ 8-11 số bắt đầu từ 0",
+                        });
+                        break;
+                    case "fail_email":
+                        Swal.fire({
+                            type: 'error',
+                            title: "Vui lòng nhập lại email theo đúng định dạng",
+                        });
+                        break;
+                    case "fail_dateOfBirth":
+                        Swal.fire({
+                            type: 'error',
+                            title: "Ngày sinh phải phù hợp",
+                        });
+                        break;
                     case "success":
                         Swal.fire({
                             type: 'success',
@@ -277,11 +308,11 @@ function getSexValue() {
                             html: "Vui Lòng Đăng Nhập Ngay"
                         }).then((result) => {
                             if (result.value) {
-                                window.open("./login.php");
+                                window.open("./login.php","_parent");
                             }
                         });
                         break;
-                
+
                     default:
                         break;
                 }

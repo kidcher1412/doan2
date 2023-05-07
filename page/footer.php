@@ -8,15 +8,15 @@
                             <a href="/Home/Index"><img src="./asset/img/footer-logo.png" alt=""></a>
                         </div>
                         <ul>
-                            <li>Địa chỉ: 28/33/12 Thanh Đa phường 27 Bình Thạnh</li>
-                            <li>Số điện thoại: 0364117408</li>
-                            <li>Thư điện tử: tructruong.070202@gmail.com</li>
+                            <li>Địa chỉ: 273 An Dương Vương Phường 2 Quận 5</li>
+                            <li>Số điện thoại: 0934827457</li>
+                            <li>Thư điện tử: kidcher1415@gmail.com</li>
                         </ul>
                         <div class="footer-social">
-                            <a href="https://www.facebook.com/thien926"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                            <a href="https://www.facebook.com/thongpacom"><i class="fa-brands fa-facebook"></i></i></a>
+                            <a href="https://github.com/kidcher1412"><i class="fa-brands fa-github"></i></a>
+                            <a href="https://www.youtube.com/channel/UCcTlzWqdHnOx3rSAbEw6ULg"><i class="fa-brands fa-youtube"></i></a>
+                            <a href="../mycv/"><i class="fa-sharp fa-regular fa-code"></i></a>
                         </div>
                     </div>
                 </div>

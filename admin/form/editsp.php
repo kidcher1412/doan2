@@ -227,13 +227,21 @@
         Use = document.querySelector('#use').value;
 
         if(!MaType||!MaBrand||!Name||!Amount||!Price||!Mota||!Use){
-            alert('không được bỏ trống phần tử Quan trọng');
-            return
+            Swal.fire({
+                    type: 'error',
+                    title: 'không được bỏ trống phần tử Quan trọng',
+                    html: "try again"
+            })
+            return;
         }
         if(masp == ''){
             // them moi cot;
             if(Img ==''){
-                alert('hình ảnh minh họa không được thiếu')
+                Swal.fire({
+                    type: 'error',
+                    title: 'hình ảnh minh họa không được thiếu',
+                    html: "try again"
+                })
                 return;
             }
         $.ajax({

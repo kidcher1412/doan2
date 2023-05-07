@@ -1008,64 +1008,66 @@ echo "
         </div>
     </div>";
     }
-    if($typeview==11){
+    if ($typeview == 11) {
         echo "
-        <div class='content'>
-        <div class='container-fluid'>
-            <div class='row'>
-                <div class='col-md-12'>
-                    <div class='card'>
-                        <div class='header'>
-                            <form class='title' onsubmit='return false;'>
-                                <p>
-                                        <input type='button' value='Thêm Heros' style='float: right;' onclick='ThemHero()'/>
-                                </p>
-                            </form>
-                        </div>
-                        <div class='content table-responsive table-full-width' id='id1'>
-                            <table class='table table-hover table-striped'>
-                                <thead>
-                                <th>Mã Heros</th>
-                                <th>Sologent Heros</th>
-                                <th>Dường Dẫn Hình Ảnh</th>
-                                <th>Hành Động</th>
-                                </thead>
-                                <tbody id='suahd1'> ";
-                                //danh sách Heros
-                                foreach ($herosData as $value) {
-                                    echo "
-                                    <tr>
-                                    <td>".$value["id_hero"]."</td>
-                                    <td>".$value["slogent"]."</td>
-                                    <td>".$value["img"]."</td>
-                                    <td>
-                                    ";
-                                    if($permissionList[$checkpoint]['valueedit']!='0')
-                                        echo "<button data-toggle='tooltip' title='' class='pd-setting-ed' data-original-title='Edit' data-toggle='modal' data-target='#myModal' onclick='EditHero(".$value["id_hero"].")'><i class='pe-7s-config'></i></button>";
-                                    if($permissionList[$checkpoint]['valuedelete']!='0')
-                                        echo"
-                                        <button data-toggle='tooltip' title='' class='pd-setting-ed' data-original-title='Trash' onclick='removeHero(".$value["id_hero"].")'><i class='pe-7s-lock'></i></button>";
-                                    echo "
-                                    </td>
-                                </tr>
-                                    ";
-                                }
-                                echo "
-                                </tbody>
-                            </table>
-
+            <div class='content'>
+            <div class='container-fluid'>
+                <div class='row'>
+                    <div class='col-md-12'>
+                        <div class='card'>
+                            <div class='header'>
+                                <form class='title' onsubmit='return false;'>
+                                    <p>
+                                            <input type='button' value='Thêm Heros' style='float: right;' onclick='ThemHero()'/>
+                                    </p>
+                                </form>
+                            </div>
+                            <div class='content table-responsive table-full-width' id='id1'>
+                                <table class='table table-hover table-striped'>
+                                    <thead>
+                                    <th>Mã Heros</th>
+                                    <th>Sologent Heros</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Đường Dẫn Hình Ảnh</th>
+                                    <th>Hành Động</th>
+                                    </thead>
+                                    <tbody id='suahd1'> ";
+        //danh sách Heros
+        foreach ($herosData as $value) {
+            echo "
+                                        <tr>
+                                        <td>" . $value["id_hero"] . "</td>
+                                        <td>" . $value["slogent"] . "</td>
+                                        <td><img src='" . $value["img"] . "' style='width: 55px; height: 55px;;oject-fit: conver;object-fit: cover;background-position: center;'></td>
+                                        <td>" . $value["img"] . "</td>
+                                        <td>
+                                        ";
+            if ($permissionList[$checkpoint]['valueedit'] != '0')
+                echo "<button data-toggle='tooltip' title='' class='pd-setting-ed' data-original-title='Edit' data-toggle='modal' data-target='#myModal' onclick='EditHero(" . $value["id_hero"] . ")'><i class='pe-7s-config'></i></button>";
+            if ($permissionList[$checkpoint]['valuedelete'] != '0')
+                echo "
+                                            <button data-toggle='tooltip' title='' class='pd-setting-ed' data-original-title='Trash' onclick='removeHero(" . $value["id_hero"] . ")'><i class='pe-7s-lock'></i></button>";
+            echo "
+                                        </td>
+                                    </tr>
+                                        ";
+        }
+        echo "
+                                    </tbody>
+                                </table>
+    
+                            </div>
                         </div>
                     </div>
+    
+    
                 </div>
-
-
             </div>
-        </div>
-    </div>";
+        </div>";
     }
-    if($typeview==12)
+    if ($typeview == 12)
         echo 'trang Hỗ trợ khách hàng';
-    if($typeview==13)
+    if ($typeview == 13)
         include './page/test.php';
 ?>
 
